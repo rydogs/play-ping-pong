@@ -1,0 +1,15 @@
+.classpath
+.gradle
+.iml
+.ipr
+.iws
+.project
+.settings
+target
+.idea
+*.iml
+*.ipr
+*.iws
+classes
+src/main/resources/version.json
+src/main/resources/application.yml
