@@ -47,7 +47,7 @@ public class SlackCommand {
   public void setCommandUser(User commandUser) {
     this.commandUser = commandUser;
   }
-  public User getCommand() {
+  public String getCommand() {
     return command;
   }
   public void setCommand(String command) {

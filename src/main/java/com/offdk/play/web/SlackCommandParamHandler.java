@@ -1,5 +1,7 @@
 package com.offdk.play.web;
 
+import java.util.HashMap;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -7,6 +9,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.offdk.play.model.SlackCommand;
+import com.offdk.play.model.User;
 
 public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
 
@@ -32,11 +35,11 @@ public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
      */
 
         //List<String> list = request.getNativeRequest().split("{}")[1].split("&");
-        String[] arr = request.getNativeRequest().split("&");
+        String[] arr = request.getContextPath().split("&");
         HashMap<String, String> d = new HashMap<String, String>();  
 
         for (String a : arr){
-          List<String> key_value = a.split("=");
+          String[] key_value = a.split("=");
           d.put(key_value[0], key_value[1]);
         }
         
@@ -47,7 +50,7 @@ public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
         mySlackCommand.setTeamDomain(d.get("team_domain"));
         mySlackCommand.setChannelId(d.get("channel_id"));
         mySlackCommand.setChannelName(d.get("channel_name"));
-        User commandUser = new User(d.get("user_id"), d.get("user_name"))
+        User commandUser = new User(d.get("user_id"), d.get("user_name"));
         mySlackCommand.setCommandUser(commandUser);
         mySlackCommand.setCommand(d.get("command"));
         mySlackCommand.setText(d.get("text"));
