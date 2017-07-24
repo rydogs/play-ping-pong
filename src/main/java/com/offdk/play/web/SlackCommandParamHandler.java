@@ -10,8 +10,10 @@ import com.offdk.play.model.SlackCommand;
 
 public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
 
-  public Object resolveArgument(MethodParameter param, ModelAndViewContainer container, NativeWebRequest request,
-      WebDataBinderFactory dataBinderFactory) throws Exception {
+  public Object resolveArgument(MethodParameter param, 
+                                ModelAndViewContainer container, 
+                                NativeWebRequest request,
+                                WebDataBinderFactory dataBinderFactory) throws Exception {
     /*
      * TODO: Implement parser for a command request: https://api.slack.com/slash-commands
      * Example:
@@ -28,7 +30,30 @@ public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
         text=94070
         response_url=https://hooks.slack.com/commands/1234/5678
      */
-    return new SlackCommand();
+
+        //List<String> list = request.getNativeRequest().split("{}")[1].split("&");
+        String[] arr = request.getNativeRequest().split("&");
+        HashMap<String, String> d = new HashMap<String, String>();  
+
+        for (String a : arr){
+          List<String> key_value = a.split("=");
+          d.put(key_value[0], key_value[1]);
+        }
+        
+        SlackCommand mySlackCommand = new SlackCommand();
+
+        mySlackCommand.setToken(d.get("token"));
+        mySlackCommand.setTeamId(d.get("team_id"));
+        mySlackCommand.setTeamDomain(d.get("team_domain"));
+        mySlackCommand.setChannelId(d.get("channel_id"));
+        mySlackCommand.setChannelName(d.get("channel_name"));
+        User commandUser = new User(d.get("user_id"), d.get("user_name"))
+        mySlackCommand.setCommandUser(commandUser);
+        mySlackCommand.setCommand(d.get("command"));
+        mySlackCommand.setText(d.get("text"));
+        mySlackCommand.setResponseUrl(d.get("response_url"));
+
+        return mySlackCommand;
   }
 
   public boolean supportsParameter(MethodParameter param) {

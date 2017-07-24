@@ -5,9 +5,12 @@ public class SlackCommand {
   private String teamId;
   private String teamDomain;
   private String channelId;
+  private String channelName;
   private User commandUser;
+  private String command;
   private String text;
   private String responseUrl;
+
   public String getToken() {
     return token;
   }
@@ -32,11 +35,23 @@ public class SlackCommand {
   public void setChannelId(String channelId) {
     this.channelId = channelId;
   }
+  public String getChannelName() {
+    return channelName;
+  }
+  public void setChannelName(String channelName) {
+    this.channelName = channelName;
+  }
   public User getCommandUser() {
     return commandUser;
   }
   public void setCommandUser(User commandUser) {
     this.commandUser = commandUser;
+  }
+  public User getCommand() {
+    return command;
+  }
+  public void setCommand(String command) {
+    this.command = command;
   }
   public String getText() {
     return text;
