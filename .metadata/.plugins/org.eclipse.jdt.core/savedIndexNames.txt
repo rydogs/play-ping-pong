@@ -1,1 +1,0 @@
-INDEX VERSION 1.127+/Users/gwang/Desktop/play-ping-pong/.metadata/.plugins/org.eclipse.jdt.core

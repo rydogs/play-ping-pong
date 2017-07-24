@@ -12,4 +12,4 @@ target
 *.iws
 classes
 src/main/resources/version.json
-.metadata/*
+*.metadata
