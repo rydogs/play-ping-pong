@@ -33,28 +33,27 @@ public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
         text=94070
         response_url=https://hooks.slack.com/commands/1234/5678
      */
-
-        //List<String> list = request.getNativeRequest().split("{}")[1].split("&");
-        String[] arr = request.getContextPath().split("&");
-        HashMap<String, String> d = new HashMap<String, String>();  
-
-        for (String a : arr){
-          String[] key_value = a.split("=");
-          d.put(key_value[0], key_value[1]);
+        
+        HashMap<String, String> parserMap = new HashMap<String, String>();
+        
+        String[] key_value_array = request.getContextPath().split("&");
+        for (String element : key_value_array){
+          String[] key_value = element.split("=");
+          parserMap.put(key_value[0], key_value[1]);
         }
         
         SlackCommand mySlackCommand = new SlackCommand();
 
-        mySlackCommand.setToken(d.get("token"));
-        mySlackCommand.setTeamId(d.get("team_id"));
-        mySlackCommand.setTeamDomain(d.get("team_domain"));
-        mySlackCommand.setChannelId(d.get("channel_id"));
-        mySlackCommand.setChannelName(d.get("channel_name"));
-        User commandUser = new User(d.get("user_id"), d.get("user_name"));
+        mySlackCommand.setToken(parserMap.get("token"));
+        mySlackCommand.setTeamId(parserMap.get("team_id"));
+        mySlackCommand.setTeamDomain(parserMap.get("team_domain"));
+        mySlackCommand.setChannelId(parserMap.get("channel_id"));
+        mySlackCommand.setChannelName(parserMap.get("channel_name"));
+        User commandUser = new User(parserMap.get("user_id"), parserMap.get("user_name"));
         mySlackCommand.setCommandUser(commandUser);
-        mySlackCommand.setCommand(d.get("command"));
-        mySlackCommand.setText(d.get("text"));
-        mySlackCommand.setResponseUrl(d.get("response_url"));
+        mySlackCommand.setCommand(parserMap.get("command"));
+        mySlackCommand.setText(parserMap.get("text"));
+        mySlackCommand.setResponseUrl(parserMap.get("response_url"));
 
         return mySlackCommand;
   }
