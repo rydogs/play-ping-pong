@@ -6,7 +6,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.offdk.play.model.SlackCommand;
+import com.offdk.play.model.slack.SlackCommand;
 
 public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
 
