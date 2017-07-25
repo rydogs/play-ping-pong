@@ -20,7 +20,7 @@ public class EloRatingCalculator implements RatingCalculator {
   private static final int K_FACTOR = 20;
 
   @Override
-  public Map<Player, Map<RatingType, BigDecimal>> calculate(Match match) {
+  public Map<Player, Map<RatingType, Map<RatingKey, BigDecimal>>> calculate(Match match) {
     Preconditions.checkNotNull(match, "Match cannot be null");
     Preconditions
         .checkArgument(!CollectionUtils.isEmpty(match.getPlayers()), "A match must have players");
@@ -47,12 +47,15 @@ public class EloRatingCalculator implements RatingCalculator {
             playerTwo.getValue() > playerOne.getValue());
 
     return ImmutableMap.of(
-        playerOne.getKey(), ImmutableMap.of(RatingType.ELO, playerOneNewRating),
-        playerTwo.getKey(), ImmutableMap.of(RatingType.ELO, playerTwoNewRating));
+        playerOne.getKey(),
+        ImmutableMap.of(RatingType.ELO, ImmutableMap.of(RatingKey.RATING, playerOneNewRating)),
+        playerTwo.getKey(),
+        ImmutableMap.of(RatingType.ELO, ImmutableMap.of(RatingKey.RATING, playerTwoNewRating)));
   }
 
   private BigDecimal getCurrentRating(Player player) {
-    return player.getCurrentRating(RatingType.ELO).orElse(BigDecimal.valueOf(DEFAULT_RATING));
+    return player.getCurrentRating(RatingType.ELO).map(rating -> rating.get(RatingKey.RATING))
+        .orElse(BigDecimal.valueOf(DEFAULT_RATING));
   }
 
   private BigDecimal calculateScore(BigDecimal rating) {

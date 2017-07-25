@@ -35,13 +35,16 @@ public class EloRatingCalculatorTest {
     matchOne.addScore(playerOne, 21);
     matchOne.addScore(playerTwo, 18);
 
-    Map<Player, Map<RatingType, BigDecimal>> result = calculator.calculate(matchOne);
+    Map<Player, Map<RatingType, Map<RatingKey, BigDecimal>>> result = calculator
+        .calculate(matchOne);
     result.forEach((player, ratings) -> player.updateCurrentRatings(ratings));
 
     Assert.assertEquals(BigDecimal.valueOf(1510.0),
-        playerOne.getCurrentRating(RatingType.ELO).get().setScale(1, RoundingMode.HALF_UP));
+        playerOne.getCurrentRating(RatingType.ELO).get().get(RatingKey.RATING)
+            .setScale(1, RoundingMode.HALF_UP));
     Assert.assertEquals(BigDecimal.valueOf(1490.0),
-        playerTwo.getCurrentRating(RatingType.ELO).get().setScale(1, RoundingMode.HALF_UP));
+        playerTwo.getCurrentRating(RatingType.ELO).get().get(RatingKey.RATING)
+            .setScale(1, RoundingMode.HALF_UP));
 
     // Match Two
     Match matchTwo = new Match(Lists.newArrayList(playerOne, playerTwo));
@@ -52,9 +55,11 @@ public class EloRatingCalculatorTest {
     result.forEach((player, ratings) -> player.updateCurrentRatings(ratings));
 
     Assert.assertEquals(BigDecimal.valueOf(1519.4),
-        playerOne.getCurrentRating(RatingType.ELO).get().setScale(1, RoundingMode.HALF_UP));
+        playerOne.getCurrentRating(RatingType.ELO).get().get(RatingKey.RATING)
+            .setScale(1, RoundingMode.HALF_UP));
     Assert.assertEquals(BigDecimal.valueOf(1480.6),
-        playerTwo.getCurrentRating(RatingType.ELO).get().setScale(1, RoundingMode.HALF_UP));
+        playerTwo.getCurrentRating(RatingType.ELO).get().get(RatingKey.RATING)
+            .setScale(1, RoundingMode.HALF_UP));
 
     // Match Three
     Match matchThree = new Match(Lists.newArrayList(playerOne, playerTwo));
@@ -65,9 +70,11 @@ public class EloRatingCalculatorTest {
     result.forEach((player, ratings) -> player.updateCurrentRatings(ratings));
 
     Assert.assertEquals(BigDecimal.valueOf(1508.3),
-        playerOne.getCurrentRating(RatingType.ELO).get().setScale(1, RoundingMode.HALF_UP));
+        playerOne.getCurrentRating(RatingType.ELO).get().get(RatingKey.RATING)
+            .setScale(1, RoundingMode.HALF_UP));
     Assert.assertEquals(BigDecimal.valueOf(1491.7),
-        playerTwo.getCurrentRating(RatingType.ELO).get().setScale(1, RoundingMode.HALF_UP));
+        playerTwo.getCurrentRating(RatingType.ELO).get().get(RatingKey.RATING)
+            .setScale(1, RoundingMode.HALF_UP));
   }
 
   @Test(expected = NullPointerException.class)

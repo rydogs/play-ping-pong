@@ -7,6 +7,6 @@ import java.util.Map;
 
 public interface RatingCalculator {
 
-  Map<Player, Map<RatingType, BigDecimal>> calculate(Match match);
+  Map<Player, Map<RatingType, Map<RatingKey, BigDecimal>>> calculate(Match match);
 
 }
