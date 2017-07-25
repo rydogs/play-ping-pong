@@ -1,6 +1,6 @@
 package com.offdk.play.web;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -8,6 +8,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import com.google.common.collect.Maps;
 import com.offdk.play.model.SlackCommand;
 import com.offdk.play.model.User;
 
@@ -34,8 +35,7 @@ public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
         response_url=https://hooks.slack.com/commands/1234/5678
 		 */
 
-		HashMap<String, String> parserMap = new HashMap<String, String>();
-
+		Map<String, String> parserMap = Maps.newHashMap();
 		String[] key_value_array = request.getContextPath().split("&");
 		for (String element : key_value_array){
 			String[] key_value = element.split("=");
