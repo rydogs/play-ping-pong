@@ -12,4 +12,3 @@ target
 *.iws
 classes
 src/main/resources/version.json
-src/main/resources/application.yml
