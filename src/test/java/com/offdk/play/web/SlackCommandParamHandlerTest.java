@@ -38,23 +38,21 @@ public class SlackCommandParamHandlerTest {
   @Test
   public void handlTest() throws Exception {
     Map<String, String> requestMap = ImmutableMap.<String, String>builder()
-        .put("token", "gIkuvaNzQIHg97ATvDxqgjtO")
-        .put("team_id", "T0001")
-        .put("team_domain", "example")
-        .put("enterprise_id", "E0001")
-        .put("enterprise_name", "Globular Construct Inc")
-        .put("channel_id", "C2147483705")
-        .put("channel_name", "test")
-        .put("user_id", "U2147483697")
-        .put("user_name", "Steve Bob")
-        .put("command", "/weather")
+        .put("token", "KqQi709jvAqsFI2u5QynCu2G")
+		.put("team_id", "T6ATNPZ88")
+		.put("team_domain", "playpingpong")
+		.put("channel_id", "C6CE9FBV4")
+		.put("channel_name", "general")
+		.put("user_id", "U6BMC8KT7")
+		.put("user_name", "rydogs")
+		.put("command", "/play")
         .put("text", RandomStringUtils.randomAlphabetic(20))
         .put("response_url", RandomStringUtils.randomAlphanumeric(20))
         .build();
-    String testString = URLEncoder.encode(requestMap.entrySet().stream()
-        .map(e -> EQL_JOINER.join(e.getKey(), e.getValue()))
-        .collect(Collectors.joining("&")), Charsets.UTF_8.toString());
-
+     //String testString = URLEncoder.encode(requestMap.entrySet().stream()
+     //   .map(e -> EQL_JOINER.join(e.getKey(), e.getValue()))
+     //   .collect(Collectors.joining("&")), Charsets.UTF_8.toString());
+    String testString = "token=KqQi709jvAqsFI2u5QynCu2G&team_id=T6ATNPZ88&team_domain=playpingpong&channel_id=C6CE9FBV4&channel_name=general&user_id=U6BMC8KT7&user_name=rydogs&command=%2Fplay&text=%40furman&response_url=https%3A%2F%2Fhooks.slack.com%2Fcommands%2FT6ATNPZ88%2F215127455105%2F3EEsrVjZVltVZu1LcrssfDsA";
     NativeWebRequest request = mock(NativeWebRequest.class);
     HttpServletRequest httpRequest = mock(HttpServletRequest.class);
 

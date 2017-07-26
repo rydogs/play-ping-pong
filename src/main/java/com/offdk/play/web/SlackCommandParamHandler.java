@@ -50,7 +50,9 @@ public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
 		Map<String, String> parserMap = Maps.newHashMap();
 		for (String element : requestBody.split("&")) {
 			String[] keyValue = element.split("=");
-			parserMap.put(keyValue[0], keyValue[1]);
+			if(keyValue.length == 2){
+				parserMap.put(keyValue[0], keyValue[1]);
+			}
 		}
 
 		SlackCommand mySlackCommand = new SlackCommand();
