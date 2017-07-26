@@ -6,7 +6,7 @@ import com.offdk.play.model.game.Player;
 import com.offdk.play.model.slack.User;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Map;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,15 +35,17 @@ public class EloRatingCalculatorTest {
     matchOne.addScore(playerOne, 21);
     matchOne.addScore(playerTwo, 18);
 
-    Map<Player, Map<RatingType, Map<RatingKey, BigDecimal>>> result = calculator
-        .calculate(matchOne);
-    result.forEach((player, ratings) -> player.updateCurrentRatings(ratings));
+    List<Rating> result = calculator.calculate(matchOne);
+    for (int idx = 0; idx < matchOne.getPlayers().size(); idx++) {
+      matchOne.getPlayers().get(idx)
+          .updateCurrentRatings(calculator.getRatingType(), result.get(idx));
+    }
 
     Assert.assertEquals(BigDecimal.valueOf(1510.0),
-        playerOne.getCurrentRating(RatingType.ELO).get().get(RatingKey.RATING)
+        playerOne.getCurrentRating(RatingType.ELO).map(Rating::getRating).get()
             .setScale(1, RoundingMode.HALF_UP));
     Assert.assertEquals(BigDecimal.valueOf(1490.0),
-        playerTwo.getCurrentRating(RatingType.ELO).get().get(RatingKey.RATING)
+        playerTwo.getCurrentRating(RatingType.ELO).map(Rating::getRating).get()
             .setScale(1, RoundingMode.HALF_UP));
 
     // Match Two
@@ -52,13 +54,16 @@ public class EloRatingCalculatorTest {
     matchTwo.addScore(playerTwo, 17);
 
     result = calculator.calculate(matchTwo);
-    result.forEach((player, ratings) -> player.updateCurrentRatings(ratings));
+    for (int idx = 0; idx < matchOne.getPlayers().size(); idx++) {
+      matchTwo.getPlayers().get(idx)
+          .updateCurrentRatings(calculator.getRatingType(), result.get(idx));
+    }
 
     Assert.assertEquals(BigDecimal.valueOf(1519.4),
-        playerOne.getCurrentRating(RatingType.ELO).get().get(RatingKey.RATING)
+        playerOne.getCurrentRating(RatingType.ELO).map(Rating::getRating).get()
             .setScale(1, RoundingMode.HALF_UP));
     Assert.assertEquals(BigDecimal.valueOf(1480.6),
-        playerTwo.getCurrentRating(RatingType.ELO).get().get(RatingKey.RATING)
+        playerTwo.getCurrentRating(RatingType.ELO).map(Rating::getRating).get()
             .setScale(1, RoundingMode.HALF_UP));
 
     // Match Three
@@ -67,13 +72,16 @@ public class EloRatingCalculatorTest {
     matchThree.addScore(playerTwo, 21);
 
     result = calculator.calculate(matchThree);
-    result.forEach((player, ratings) -> player.updateCurrentRatings(ratings));
+    for (int idx = 0; idx < matchOne.getPlayers().size(); idx++) {
+      matchThree.getPlayers().get(idx)
+          .updateCurrentRatings(calculator.getRatingType(), result.get(idx));
+    }
 
     Assert.assertEquals(BigDecimal.valueOf(1508.3),
-        playerOne.getCurrentRating(RatingType.ELO).get().get(RatingKey.RATING)
+        playerOne.getCurrentRating(RatingType.ELO).map(Rating::getRating).get()
             .setScale(1, RoundingMode.HALF_UP));
     Assert.assertEquals(BigDecimal.valueOf(1491.7),
-        playerTwo.getCurrentRating(RatingType.ELO).get().get(RatingKey.RATING)
+        playerTwo.getCurrentRating(RatingType.ELO).map(Rating::getRating).get()
             .setScale(1, RoundingMode.HALF_UP));
   }
 
