@@ -10,6 +10,8 @@
 		<version.spring-boot>1.5.4.RELEASE</version.spring-boot>
 		<version.vavr>0.9.0</version.vavr>
 		<version.guava>22.0</version.guava>
+		<version.mockito>1.10.19</version.mockito>
+		<version.commons-lang3>3.4</version.commons-lang3>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -57,6 +59,18 @@
 			<groupId>io.vavr</groupId>
 			<artifactId>vavr-test</artifactId>
 			<version>${version.vavr}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${version.mockito}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${version.commons-lang3}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
