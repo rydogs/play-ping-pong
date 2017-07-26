@@ -41,16 +41,16 @@ public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
         response_url=https://hooks.slack.com/commands/1234/5678
 		 */
 
-	  HttpServletRequest httpRequest = request.getNativeRequest(HttpServletRequest.class);
-	  String requestBody = Try.of(() -> httpRequest.getReader())
-	      //read post request body as a string
-	      .mapTry(reader -> CharStreams.toString(reader))
-	      //Url escape the string
-	      .map(str -> UrlEscapers.urlFragmentEscaper().escape(str)).get();
-	  Map<String, String> parserMap = Maps.newHashMap();
+		HttpServletRequest httpRequest = request.getNativeRequest(HttpServletRequest.class);
+		String requestBody = Try.of(() -> httpRequest.getReader())
+				//read post request body as a string
+				.mapTry(reader -> CharStreams.toString(reader))
+				//Url escape the string
+				.map(str -> UrlEscapers.urlFragmentEscaper().escape(str)).get();
+		Map<String, String> parserMap = Maps.newHashMap();
 		for (String element : requestBody.split("&")) {
-			String[] key_value = element.split("=");
-			parserMap.put(key_value[0], key_value[1]);
+			String[] keyValue = element.split("=");
+			parserMap.put(keyValue[0], keyValue[1]);
 		}
 
 		SlackCommand mySlackCommand = new SlackCommand();
