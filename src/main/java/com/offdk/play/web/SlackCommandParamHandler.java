@@ -2,6 +2,8 @@ package com.offdk.play.web;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -9,8 +11,12 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.google.common.collect.Maps;
+import com.google.common.io.CharStreams;
+import com.google.common.net.UrlEscapers;
 import com.offdk.play.model.SlackCommand;
 import com.offdk.play.model.User;
+
+import io.vavr.control.Try;
 
 public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
 
@@ -35,9 +41,14 @@ public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
         response_url=https://hooks.slack.com/commands/1234/5678
 		 */
 
-		Map<String, String> parserMap = Maps.newHashMap();
-		String[] key_value_array = request.getContextPath().split("&");
-		for (String element : key_value_array){
+	  HttpServletRequest httpRequest = request.getNativeRequest(HttpServletRequest.class);
+	  String requestBody = Try.of(() -> httpRequest.getReader())
+	      //read post request body as a string
+	      .mapTry(reader -> CharStreams.toString(reader))
+	      //Url escape the string
+	      .map(str -> UrlEscapers.urlFragmentEscaper().escape(str)).get();
+	  Map<String, String> parserMap = Maps.newHashMap();
+		for (String element : requestBody.split("&")) {
 			String[] key_value = element.split("=");
 			parserMap.put(key_value[0], key_value[1]);
 		}
