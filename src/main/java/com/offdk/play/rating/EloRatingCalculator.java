@@ -2,8 +2,8 @@ package com.offdk.play.rating;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.offdk.play.model.game.Match;
+import com.offdk.play.model.game.MatchStatus;
 import com.offdk.play.model.game.Player;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -31,9 +31,11 @@ public class EloRatingCalculator implements RatingCalculator {
         .checkArgument(!CollectionUtils.isEmpty(match.getPlayers()), "A match must have players");
     Preconditions
         .checkArgument(match.getPlayers().size() == 2, "The ELO algorithm requires two players");
+    Preconditions.checkState(MatchStatus.COMPLETED.equals(match.getStatus()),
+        "A match must be completed to calculate new ratings");
 
-    Entry<Player, Integer> playerOne = Iterables.get(match.getPlayersWithScore(), 0);
-    Entry<Player, Integer> playerTwo = Iterables.get(match.getPlayersWithScore(), 1);
+    Entry<Player, Integer> playerOne = match.getPlayersWithScore().get(0);
+    Entry<Player, Integer> playerTwo = match.getPlayersWithScore().get(1);
 
     BigDecimal playerOneCurrentRating = getCurrentRating(playerOne.getKey());
     BigDecimal playerTwoCurrentRating = getCurrentRating(playerTwo.getKey());

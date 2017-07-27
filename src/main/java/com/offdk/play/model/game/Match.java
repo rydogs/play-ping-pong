@@ -8,10 +8,22 @@ import java.util.stream.Collectors;
 
 public class Match {
 
-  private List<Entry<Player, Integer>> playersWithScore = Lists.newArrayList();
+  private MatchStatus status;
+  private List<Entry<Player, Integer>> playersWithScore;
 
   public Match(List<Player> players) {
+    this.status = MatchStatus.CHALLENGED;
+    this.playersWithScore = Lists.newArrayList();
+
     players.forEach(player -> playersWithScore.add(new SimpleEntry<>(player, 0)));
+  }
+
+  public MatchStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(MatchStatus status) {
+    this.status = status;
   }
 
   public List<Player> getPlayers() {
@@ -23,6 +35,7 @@ public class Match {
   }
 
   public void addScore(Player player, int score) {
-    playersWithScore.stream().filter(p -> p.getKey().equals(player)).forEach(p -> p.setValue(score));
+    playersWithScore.stream().filter(p -> p.getKey().equals(player))
+        .forEach(p -> p.setValue(score));
   }
 }

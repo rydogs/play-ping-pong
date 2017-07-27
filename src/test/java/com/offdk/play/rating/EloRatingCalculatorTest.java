@@ -2,6 +2,7 @@ package com.offdk.play.rating;
 
 import com.google.common.collect.Lists;
 import com.offdk.play.model.game.Match;
+import com.offdk.play.model.game.MatchStatus;
 import com.offdk.play.model.game.Player;
 import com.offdk.play.model.slack.User;
 import java.math.BigDecimal;
@@ -32,6 +33,7 @@ public class EloRatingCalculatorTest {
   public void calculate() throws Exception {
     // Match One
     Match matchOne = new Match(Lists.newArrayList(playerOne, playerTwo));
+    matchOne.setStatus(MatchStatus.COMPLETED);
     matchOne.addScore(playerOne, 21);
     matchOne.addScore(playerTwo, 18);
 
@@ -50,6 +52,7 @@ public class EloRatingCalculatorTest {
 
     // Match Two
     Match matchTwo = new Match(Lists.newArrayList(playerOne, playerTwo));
+    matchTwo.setStatus(MatchStatus.COMPLETED);
     matchTwo.addScore(playerOne, 21);
     matchTwo.addScore(playerTwo, 17);
 
@@ -68,6 +71,7 @@ public class EloRatingCalculatorTest {
 
     // Match Three
     Match matchThree = new Match(Lists.newArrayList(playerOne, playerTwo));
+    matchThree.setStatus(MatchStatus.COMPLETED);
     matchThree.addScore(playerOne, 14);
     matchThree.addScore(playerTwo, 21);
 
@@ -98,5 +102,12 @@ public class EloRatingCalculatorTest {
   @Test(expected = IllegalArgumentException.class)
   public void calculateTooManyPlayers() throws Exception {
     calculator.calculate(new Match(Lists.newArrayList(playerOne, playerTwo, playerThree)));
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void calculateIncompleteMatch() throws Exception {
+    Match match = new Match(Lists.newArrayList(playerOne, playerTwo));
+    match.setStatus(MatchStatus.ACCEPTED);
+    calculator.calculate(match);
   }
 }
