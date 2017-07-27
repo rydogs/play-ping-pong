@@ -1,5 +1,6 @@
 package com.offdk.play.model.game;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
@@ -35,6 +36,9 @@ public class Match {
   }
 
   public void addScore(Player player, int score) {
+    Preconditions.checkState(MatchStatus.COMPLETED.equals(status),
+        "A match must be completed to add a score");
+
     playersWithScore.stream().filter(p -> p.getKey().equals(player))
         .forEach(p -> p.setValue(score));
   }
