@@ -1,4 +1,4 @@
-package com.offdk.play.model;
+package com.offdk.play.model.slack;
 
 public class PlaySlackCommand extends SlackCommand {
   public SubCommand getSubComamnd() {

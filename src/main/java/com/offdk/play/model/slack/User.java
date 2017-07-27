@@ -1,4 +1,4 @@
-package com.offdk.play.model;
+package com.offdk.play.model.slack;
 
 public class User {
   private final String userId;
@@ -12,6 +12,7 @@ public class User {
   public String getUserId() {
     return userId;
   }
+
   public String getUserName() {
     return userName;
   }
