@@ -5,6 +5,8 @@ public class SlackCommand {
   private String teamId;
   private String teamDomain;
   private String channelId;
+  private String channelName;
+  private String command;
   private User commandUser;
   private String text;
   private String responseUrl;
@@ -49,5 +51,17 @@ public class SlackCommand {
   }
   public void setResponseUrl(String responseUrl) {
     this.responseUrl = responseUrl;
+  }
+  public String getChannelName() {
+    return channelName;
+  }
+  public void setChannelName(String channelName) {
+    this.channelName = channelName;
+  }
+  public String getCommand() {
+    return command;
+  }
+  public void setCommand(String command) {
+    this.command = command;
   }
 }
