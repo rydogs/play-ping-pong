@@ -1,0 +1,5 @@
+spring:
+  name: play-ping-pong
+  data:
+    mongodb:
+      host: localhost

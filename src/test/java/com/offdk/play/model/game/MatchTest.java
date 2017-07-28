@@ -15,8 +15,8 @@ public class MatchTest {
 
   @Before
   public void setUp() throws Exception {
-    playerOne = new Player(new User("0", "Rick Sanchez"));
-    playerTwo = new Player(new User("1", "Morty Smith"));
+    playerOne = new Player("1", new User("0", "Rick Sanchez"));
+    playerTwo = new Player("2", new User("1", "Morty Smith"));
   }
 
   @Test
