@@ -12,6 +12,8 @@
     <version.vavr>0.9.0</version.vavr>
     <version.guava>22.0</version.guava>
     <version.mockito>2.8.47</version.mockito>
+    <version.commons-lang3>3.4</version.commons-lang3>
+
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -67,6 +69,12 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <version>${version.mockito}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${version.commons-lang3}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
