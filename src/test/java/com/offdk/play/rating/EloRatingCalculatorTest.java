@@ -22,9 +22,9 @@ public class EloRatingCalculatorTest {
 
   @Before
   public void setUp() throws Exception {
-    playerOne = new Player(new User("0", "Rick Sanchez"));
-    playerTwo = new Player(new User("1", "Morty Smith"));
-    playerThree = new Player(new User("2", "Mr. Meeseeks"));
+    playerOne = Player.newPlayer("2", new User("0", "Rick Sanchez"));
+    playerTwo = Player.newPlayer("4", new User("1", "Morty Smith"));
+    playerThree = Player.newPlayer("3", new User("2", "Mr. Meeseeks"));
 
     calculator = new EloRatingCalculator();
   }

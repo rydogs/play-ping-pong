@@ -22,7 +22,7 @@ public class PlayerTest {
 
   @Test
   public void hasCurrentRatings() throws Exception {
-    Player player = new Player(user);
+    Player player = new Player("1", user);
     player.updateCurrentRatings(RatingType.ELO, new EloRating(BigDecimal.valueOf(1234.56)));
 
     Optional<BigDecimal> rating = player.getCurrentRating(RatingType.ELO).map(Rating::getRating);
@@ -33,7 +33,7 @@ public class PlayerTest {
 
   @Test
   public void missingCurrentRatings() throws Exception {
-    Player player = new Player(user);
+    Player player = new Player("1", user);
 
     Optional<BigDecimal> rating = player.getCurrentRating(RatingType.ELO).map(Rating::getRating);
 
