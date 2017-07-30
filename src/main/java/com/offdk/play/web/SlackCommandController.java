@@ -1,8 +1,8 @@
 package com.offdk.play.web;
 
-import com.offdk.play.model.slack.SlackCommand;
+import com.offdk.play.model.slack.command.SlackCommand;
+import com.offdk.play.model.slack.message.Message;
 import com.offdk.play.service.SlackChatService;
-import com.offdk.play.service.SlackResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ public class SlackCommandController {
 
   @PostMapping("/command")
   @ResponseBody
-  public SlackResponse command(@SlackCommandParam SlackCommand command) {
+  public Message command(@SlackCommandParam SlackCommand command) {
     LOGGER.info("Request: {}" + command);
     return chatService.respond(command);
   }

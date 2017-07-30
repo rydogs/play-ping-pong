@@ -14,3 +14,4 @@ classes
 src/main/resources/application.yml
 src/main/resources/version.json
 *.metadata
+/.factorypath
