@@ -14,20 +14,20 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
-import com.offdk.play.model.slack.SlackCommand;
 import com.offdk.play.model.slack.User;
+import com.offdk.play.model.slack.command.ImmutableSlackCommand;
 
 import io.vavr.control.Try;
 
 public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
-
   public Object resolveArgument(MethodParameter param, ModelAndViewContainer container, NativeWebRequest request,
       WebDataBinderFactory dataBinderFactory) throws Exception {
+
     HttpServletRequest httpRequest = request.getNativeRequest(HttpServletRequest.class);
     String requestBody = Try.of(() -> httpRequest.getReader())
-        // read post request body as a string
+        //read post request body as a string
         .mapTry(reader -> CharStreams.toString(reader))
-        // Url decode the string
+        //Url decode the string
         .mapTry(str -> URLDecoder.decode(str, Charsets.UTF_8.toString())).get();
     Map<String, String> parserMap = Maps.newHashMap();
     for (String element : requestBody.split("&")) {
@@ -37,20 +37,19 @@ public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
       }
     }
 
-    SlackCommand mySlackCommand = new SlackCommand();
-
-    mySlackCommand.setToken(parserMap.get("token"));
-    mySlackCommand.setTeamId(parserMap.get("team_id"));
-    mySlackCommand.setTeamDomain(parserMap.get("team_domain"));
-    mySlackCommand.setChannelId(parserMap.get("channel_id"));
-    mySlackCommand.setChannelName(parserMap.get("channel_name"));
     User commandUser = new User(parserMap.get("user_id"), parserMap.get("user_name"));
-    mySlackCommand.setCommandUser(commandUser);
-    mySlackCommand.setCommand(parserMap.get("command"));
-    mySlackCommand.setText(parserMap.get("text"));
-    mySlackCommand.setResponseUrl(parserMap.get("response_url"));
 
-    return mySlackCommand;
+    return ImmutableSlackCommand.builder()
+            .token(parserMap.get("token"))
+            .teamId(parserMap.get("team_id"))
+            .teamDomain(parserMap.get("team_domain"))
+            .channelId(parserMap.get("channel_id"))
+            .channelName(parserMap.get("channel_name"))
+            .commandUser(commandUser)
+            .command(parserMap.get("command"))
+            .text(parserMap.get("text"))
+            .responseUrl(parserMap.get("response_url"))
+            .build();
   }
 
   public boolean supportsParameter(MethodParameter param) {
