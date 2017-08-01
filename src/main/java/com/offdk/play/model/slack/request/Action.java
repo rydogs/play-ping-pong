@@ -22,6 +22,7 @@ public interface Action {
 
   String name();
 
+  @Nullable // Needed for Callback
   String text();
 
   String type();
