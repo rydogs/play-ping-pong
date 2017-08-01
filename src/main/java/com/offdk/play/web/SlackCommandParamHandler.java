@@ -14,6 +14,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
+import com.offdk.play.model.slack.Channel;
+import com.offdk.play.model.slack.Team;
 import com.offdk.play.model.slack.User;
 import com.offdk.play.model.slack.command.ImmutableSlackCommand;
 
@@ -38,13 +40,12 @@ public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
     }
 
     User commandUser = new User(parserMap.get("user_id"), parserMap.get("user_name"));
-
+    Team team = new Team(parserMap.get("team_id"), parserMap.get("team_domain"));
+    Channel channel = new Channel(parserMap.get("channel_id"), parserMap.get("channel_name"));
     return ImmutableSlackCommand.builder()
             .token(parserMap.get("token"))
-            .teamId(parserMap.get("team_id"))
-            .teamDomain(parserMap.get("team_domain"))
-            .channelId(parserMap.get("channel_id"))
-            .channelName(parserMap.get("channel_name"))
+            .team(team)
+            .channel(channel)
             .commandUser(commandUser)
             .command(parserMap.get("command"))
             .text(parserMap.get("text"))

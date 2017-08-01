@@ -1,9 +1,12 @@
 package com.offdk.play.model.slack.command;
 
+import org.immutables.value.Value;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.offdk.play.model.slack.Channel;
+import com.offdk.play.model.slack.Team;
 import com.offdk.play.model.slack.User;
-import org.immutables.value.Value;
 
 @Value.Immutable
 @JsonSerialize(as = ImmutableSlackCommand.class)
@@ -12,13 +15,9 @@ public interface SlackCommand {
 
   String token();
 
-  String teamId();
+  Team team();
 
-  String teamDomain();
-
-  String channelId();
-
-  String channelName();
+  Channel channel();
 
   String command();
 
