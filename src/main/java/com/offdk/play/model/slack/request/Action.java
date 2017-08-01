@@ -15,14 +15,16 @@ import org.immutables.value.Value;
 @Value.Immutable
 @JsonSerialize(as = ImmutableAction.class)
 @JsonDeserialize(as = ImmutableAction.class)
-@Value.Style(passAnnotations = {JsonNaming.class, JsonInclude.class}, forceJacksonPropertyNames = false)
+@Value.Style(passAnnotations = {JsonNaming.class,
+    JsonInclude.class}, forceJacksonPropertyNames = false)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonInclude(Include.NON_ABSENT)
 public interface Action {
 
   String name();
 
-  @Nullable // Needed for Callback
+  @Nullable
+    // Needed for Callback
   String text();
 
   String type();
@@ -56,7 +58,8 @@ public interface Action {
   }
 
   static Action createButton(String group, String text, Style style) {
-    Preconditions.checkArgument(text.length() < 30, "Text too long for button");
+    Preconditions.checkArgument(text.length() <= 30,
+        "Use a maximum of 30 characters or so for best results across form factors");
 
     return ImmutableAction.builder()
         .name(group)

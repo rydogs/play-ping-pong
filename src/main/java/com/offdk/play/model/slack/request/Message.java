@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Preconditions;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
@@ -72,6 +73,8 @@ public interface Message {
   }
 
   default Message addAttachments(Attachment... attachments) {
+    Preconditions.checkArgument(attachments.length <= 20,
+        "Messages should contain no more than 20 attachments");
     return ImmutableMessage.builder()
         .text(this.text())
         .addAttachments(attachments)

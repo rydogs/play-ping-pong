@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -56,6 +57,9 @@ public interface Attachment {
   }
 
   default Attachment addActions(Action... actions) {
+    Preconditions.checkArgument(actions.length <= 5,
+        "A maximum of 5 actions per attachment may be provided");
+
     return ImmutableAttachment.builder()
         .title(this.title())
         .fallback(this.fallback())
