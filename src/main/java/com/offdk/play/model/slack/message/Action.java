@@ -23,39 +23,40 @@ import com.google.common.base.Preconditions;
 @Style(passAnnotations = {JsonNaming.class, JsonInclude.class}, forceJacksonPropertyNames = false)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonInclude(Include.NON_ABSENT)
-public abstract class Action {
+public interface Action {
 
-  public abstract String name();
-
-  public abstract String text();
-
-  public abstract String type();
+  String name();
 
   @Nullable
-  public abstract String value();
+  String text();
+
+  String type();
 
   @Nullable
-  public abstract Confirm confirm();
+  String value();
 
   @Nullable
-  public abstract Style style();
+  Confirm confirm();
 
   @Nullable
-  public abstract List<Option> options();
+  Style style();
 
   @Nullable
-  public abstract OptionGroup optionGroups();
+  List<Option> options();
 
   @Nullable
-  public abstract String dataSource();
+  OptionGroup optionGroups();
 
   @Nullable
-  public abstract List<Option> selectedOptions();
+  String dataSource();
 
   @Nullable
-  public abstract Integer minQueryLength();
+  List<Option> selectedOptions();
 
-  public static Action createButton(String group, String text) {
+  @Nullable
+  Integer minQueryLength();
+
+  static Action createButton(String group, String text) {
     return createButton(group, text, Style.Default);
   }
 
@@ -72,7 +73,7 @@ public abstract class Action {
         .build();
   }
 
-  public Action addConfirmation() {
+  default Action addConfirmation() {
     Confirm confirm = ImmutableConfirm.builder()
         .text("Are you sure?")
         .okText("Yes")
