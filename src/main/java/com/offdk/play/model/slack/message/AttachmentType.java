@@ -1,10 +1,18 @@
 package com.offdk.play.model.slack.message;
 
-public enum AttachmentType {
-  DEFAULT;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-  @Override
-  public String toString() {
-    return name().toLowerCase();
+public enum AttachmentType {
+  DEFAULT("default");
+
+  private final String value;
+
+  AttachmentType(String value) {
+    this.value = value;
+  }
+
+  @JsonValue
+  public String getValue() {
+    return value;
   }
 }

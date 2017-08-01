@@ -1,21 +1,17 @@
 package com.offdk.play.model.slack.message;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import org.immutables.value.Value;
-import org.immutables.value.Value.Style;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Preconditions;
+import java.util.List;
+import javax.annotation.Nullable;
+import org.immutables.value.Value;
+import org.immutables.value.Value.Style;
 
 @Value.Immutable
 @JsonSerialize(as = ImmutableAction.class)
@@ -23,43 +19,43 @@ import com.google.common.base.Preconditions;
 @Style(passAnnotations = {JsonNaming.class, JsonInclude.class}, forceJacksonPropertyNames = false)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonInclude(Include.NON_ABSENT)
-public abstract class Action {
+public interface Action {
 
-  public abstract String name();
+  String name();
 
-  public abstract String text();
+  String text();
 
-  public abstract String type();
-
-  @Nullable
-  public abstract String value();
+  String type();
 
   @Nullable
-  public abstract Confirm confirm();
+  String value();
 
   @Nullable
-  public abstract Style style();
+  Confirm confirm();
 
   @Nullable
-  public abstract List<Option> options();
+  StyleType style();
 
   @Nullable
-  public abstract OptionGroup optionGroups();
+  List<Option> options();
 
   @Nullable
-  public abstract String dataSource();
+  OptionGroup optionGroups();
 
   @Nullable
-  public abstract List<Option> selectedOptions();
+  String dataSource();
 
   @Nullable
-  public abstract Integer minQueryLength();
+  List<Option> selectedOptions();
 
-  public static Action createButton(String group, String text) {
-    return createButton(group, text, Style.Default);
+  @Nullable
+  Integer minQueryLength();
+
+  static Action createButton(String group, String text) {
+    return createButton(group, text, StyleType.DEFAULT);
   }
 
-  public static Action createButton(String group, String text, Style style) {
+  static Action createButton(String group, String text, StyleType style) {
     Preconditions.checkArgument(text.length() < 30, "Text too long for button");
 
     return ImmutableAction.builder()
@@ -72,7 +68,7 @@ public abstract class Action {
         .build();
   }
 
-  public Action addConfirmation() {
+  default Action addConfirmation() {
     Confirm confirm = ImmutableConfirm.builder()
         .text("Are you sure?")
         .okText("Yes")
@@ -87,18 +83,5 @@ public abstract class Action {
         .style(this.style())
         .confirm(confirm)
         .build();
-  }
-
-  public enum Style {
-    Default("default"), Primary("primary"), Danger("danger");
-    private final String value;
-    Style(String value) {
-    	  this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-    	  return this.value;
-    }
   }
 }

@@ -13,8 +13,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Value.Immutable
-@JsonSerialize(as = ImmutableOptionGroup.class)
-@JsonDeserialize(as = ImmutableOptionGroup.class)
+@JsonSerialize(as = ImmutableOption.class)
+@JsonDeserialize(as = ImmutableOption.class)
 @Style(passAnnotations = {JsonNaming.class, JsonInclude.class}, forceJacksonPropertyNames = false)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonInclude(Include.NON_ABSENT)

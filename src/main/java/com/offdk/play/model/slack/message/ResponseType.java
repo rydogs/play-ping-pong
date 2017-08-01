@@ -1,11 +1,19 @@
 package com.offdk.play.model.slack.message;
 
-enum ResponseType {
-  IN_CHANNEL,
-  EPHEMERAL;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-  @Override
-  public String toString() {
-    return name().toLowerCase();
+enum ResponseType {
+  IN_CHANNEL("in_channel"),
+  EPHEMERAL("ephemeral");
+
+  private final String value;
+
+  ResponseType(String value) {
+    this.value = value;
+  }
+
+  @JsonValue
+  public String getValue() {
+    return value;
   }
 }

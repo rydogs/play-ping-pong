@@ -18,34 +18,34 @@ import org.immutables.value.Value.Style;
 @Style(passAnnotations = {JsonNaming.class, JsonInclude.class}, forceJacksonPropertyNames = false)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonInclude(Include.NON_ABSENT)
-public abstract class Attachment {
+public interface Attachment {
 
   @Nullable
-  public abstract String title();
+  String title();
 
-  public abstract String fallback();
+  String fallback();
 
-  public abstract String callbackId();
-
-  @Nullable
-  public abstract String color();
-
-  public abstract List<Action> actions();
+  String callbackId();
 
   @Nullable
-  public abstract String attachmentType();
+  String color();
 
-  public static Attachment createAttachment(String refId, String title, String defaultMessage) {
+  List<Action> actions();
+
+  @Nullable
+  AttachmentType attachmentType();
+
+  static Attachment createAttachment(String refId, String title, String defaultMessage) {
     return ImmutableAttachment.builder()
         .title(title)
         .fallback(defaultMessage)
         .callbackId(refId)
         .actions(Lists.newArrayList())
-        .attachmentType(AttachmentType.DEFAULT.toString())
+        .attachmentType(AttachmentType.DEFAULT)
         .build();
   }
 
-  public Attachment addAction(Action action) {
+  default Attachment addAction(Action action) {
     return ImmutableAttachment.builder()
         .title(this.title())
         .fallback(this.fallback())
@@ -55,7 +55,7 @@ public abstract class Attachment {
         .build();
   }
 
-  public Attachment addActions(Action... actions) {
+  default Attachment addActions(Action... actions) {
     return ImmutableAttachment.builder()
         .title(this.title())
         .fallback(this.fallback())
