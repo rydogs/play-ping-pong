@@ -16,7 +16,7 @@ common: &default_settings
   license_key: '9f76c3b721b65bcb9934c8a1ad3e54d01b1d1a0d'
 
   # Agent Enabled
-  # Use this setting to disable the agent instead of removing it from the startup command.
+  # Use this setting to disable the agent instead of removing it from the startup response.
   # Default is true.
   agent_enabled: true
 
@@ -33,7 +33,7 @@ common: &default_settings
 
   # To enable high security, set this property to true. When in high
   # security mode, the agent will use SSL and obfuscated SQL. Additionally,
-  # request parameters and message parameters will not be sent to New Relic.
+  # request parameters and request parameters will not be sent to New Relic.
   high_security: false
 
   # Set to true to enable support for auto app naming.
@@ -277,7 +277,7 @@ common: &default_settings
 # Environment specific settings are in this section.
 # You can use the environment to override the default settings.
 # For example, to change the app_name setting.
-# Use -Dnewrelic.environment=<environment> on the Java startup command line
+# Use -Dnewrelic.environment=<environment> on the Java startup response line
 # to set the environment.
 # The default environment is production.
 

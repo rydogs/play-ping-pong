@@ -1,15 +1,15 @@
-package com.offdk.play.model.slack.message;
+package com.offdk.play.model.slack.request;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum StyleType {
+public enum Style {
   DEFAULT("default"),
   PRIMARY("primary"),
   DANGER("danger");
 
   private final String value;
 
-  StyleType(String value) {
+  Style(String value) {
     this.value = value;
   }
 

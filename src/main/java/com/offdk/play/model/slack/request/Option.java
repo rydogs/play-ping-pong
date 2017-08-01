@@ -1,6 +1,6 @@
-package com.offdk.play.model.slack.message;
+package com.offdk.play.model.slack.request;
 
-import java.util.List;
+import javax.annotation.Nullable;
 
 import org.immutables.value.Value;
 import org.immutables.value.Value.Style;
@@ -13,14 +13,17 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Value.Immutable
-@JsonSerialize(as = ImmutableOptionGroup.class)
-@JsonDeserialize(as = ImmutableOptionGroup.class)
+@JsonSerialize(as = ImmutableOption.class)
+@JsonDeserialize(as = ImmutableOption.class)
 @Style(passAnnotations = {JsonNaming.class, JsonInclude.class}, forceJacksonPropertyNames = false)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonInclude(Include.NON_ABSENT)
-interface OptionGroup {
+interface Option {
 
   String text();
 
-  List<Option> options();
+  String value();
+
+  @Nullable
+  String description();
 }

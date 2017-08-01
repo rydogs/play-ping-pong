@@ -1,4 +1,4 @@
-package com.offdk.play.model.slack.message;
+package com.offdk.play.model.slack.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

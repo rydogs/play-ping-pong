@@ -1,4 +1,4 @@
-package com.offdk.play.model.slack.message;
+package com.offdk.play.model.slack.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -11,12 +11,11 @@ import com.google.common.base.Preconditions;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
-import org.immutables.value.Value.Style;
 
 @Value.Immutable
 @JsonSerialize(as = ImmutableAction.class)
 @JsonDeserialize(as = ImmutableAction.class)
-@Style(passAnnotations = {JsonNaming.class, JsonInclude.class}, forceJacksonPropertyNames = false)
+@Value.Style(passAnnotations = {JsonNaming.class, JsonInclude.class}, forceJacksonPropertyNames = false)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonInclude(Include.NON_ABSENT)
 public interface Action {
@@ -34,7 +33,7 @@ public interface Action {
   Confirm confirm();
 
   @Nullable
-  StyleType style();
+  Style style();
 
   @Nullable
   List<Option> options();
@@ -52,10 +51,10 @@ public interface Action {
   Integer minQueryLength();
 
   static Action createButton(String group, String text) {
-    return createButton(group, text, StyleType.DEFAULT);
+    return createButton(group, text, Style.DEFAULT);
   }
 
-  static Action createButton(String group, String text, StyleType style) {
+  static Action createButton(String group, String text, Style style) {
     Preconditions.checkArgument(text.length() < 30, "Text too long for button");
 
     return ImmutableAction.builder()

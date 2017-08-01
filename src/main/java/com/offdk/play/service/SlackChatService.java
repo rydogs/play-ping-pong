@@ -1,11 +1,11 @@
 package com.offdk.play.service;
 
 import com.offdk.play.model.game.Player;
-import com.offdk.play.model.slack.command.SlackCommand;
-import com.offdk.play.model.slack.message.Action;
-import com.offdk.play.model.slack.message.Attachment;
-import com.offdk.play.model.slack.message.Message;
-import com.offdk.play.model.slack.message.StyleType;
+import com.offdk.play.model.slack.request.Action;
+import com.offdk.play.model.slack.request.Attachment;
+import com.offdk.play.model.slack.request.Message;
+import com.offdk.play.model.slack.request.Style;
+import com.offdk.play.model.slack.response.SlackCommand;
 import com.offdk.play.persistence.PlayerRepository;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -33,8 +33,8 @@ public class SlackChatService {
     Message msg = Message.createInChannelMessage()
         .addText("Echo: " + command.text() + " from " + player)
         .addAttachment(Attachment.createAttachment("echoId", "This is a test", "Can you see me?")
-            .addActions(Action.createButton("test", "Button One", StyleType.PRIMARY),
-                Action.createButton("test", "Button Two", StyleType.DANGER).addConfirmation()));
+            .addActions(Action.createButton("test", "Button One", Style.PRIMARY),
+                Action.createButton("test", "Button Two", Style.DANGER).addConfirmation()));
 
     LOGGER.info(msg.toString());
 
