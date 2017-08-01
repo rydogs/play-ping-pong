@@ -27,9 +27,9 @@ public class SlackChatService {
   // TODO: Implement logic to respond to command
   public Message respond(SlackCommand command) {
     Player player = Optional.ofNullable(command.commandUser())
-        .flatMap(user -> playerRepo.findOneByUserUserId(user.getUserId()))
+        .flatMap(user -> playerRepo.findOneByUserId(user.getId()))
         .orElseGet(
-            () -> playerRepo.save(Player.newPlayer(command.teamId(), command.commandUser())));
+            () -> playerRepo.save(Player.newPlayer(command.team().getId(), command.commandUser())));
 
     Message msg = Message.createInChannelMessage()
         .addText("Echo: " + command.text() + " from " + player)
