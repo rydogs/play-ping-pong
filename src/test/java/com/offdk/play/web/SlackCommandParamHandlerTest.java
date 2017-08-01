@@ -4,16 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.io.CharSource;
-import com.offdk.play.model.slack.command.SlackCommand;
-import io.vavr.control.Try;
 import java.io.BufferedReader;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +20,14 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.util.UriUtils;
+
+import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.io.CharSource;
+import com.offdk.play.model.slack.command.SlackCommand;
+
+import io.vavr.control.Try;
 
 public class SlackCommandParamHandlerTest {
 
@@ -64,8 +68,8 @@ public class SlackCommandParamHandlerTest {
     SlackCommand actual = (SlackCommand) handler.resolveArgument(mock(MethodParameter.class),
         mock(ModelAndViewContainer.class), request, mock(WebDataBinderFactory.class));
 
-    assertEquals(requestMap.get("channel_name"), actual.channelName());
-    assertEquals(requestMap.get("user_name"), actual.commandUser().getUserName());
+    assertEquals(requestMap.get("channel_name"), actual.channel().getName());
+    assertEquals(requestMap.get("user_name"), actual.commandUser().getName());
   }
 
   static String encode(String value) {

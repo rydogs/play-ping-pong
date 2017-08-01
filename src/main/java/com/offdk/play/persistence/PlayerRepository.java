@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 import com.offdk.play.model.game.Player;
 
 public interface PlayerRepository extends CrudRepository<Player, Long> {
-  Optional<Player> findOneByUserUserId(String userId);
+  Optional<Player> findOneByUserId(String userId);
 }
