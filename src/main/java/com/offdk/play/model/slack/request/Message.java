@@ -1,4 +1,4 @@
-package com.offdk.play.model.slack.message;
+package com.offdk.play.model.slack.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Preconditions;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
@@ -17,39 +18,39 @@ import org.immutables.value.Value.Style;
 @Style(passAnnotations = {JsonNaming.class, JsonInclude.class}, forceJacksonPropertyNames = false)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonInclude(Include.NON_ABSENT)
-public abstract class Message {
+public interface Message {
 
   @Nullable
-  public abstract String text();
+  String text();
 
   @Nullable
-  public abstract List<Attachment> attachments();
+  List<Attachment> attachments();
 
   @Nullable
-  public abstract String threadTimestamp();
+  String threadTimestamp();
 
   @Nullable
-  public abstract String responseType();
+  ResponseType responseType();
 
   @Nullable
-  public abstract Boolean replaceOriginal();
+  Boolean replaceOriginal();
 
   @Nullable
-  public abstract Boolean deleteOriginal();
+  Boolean deleteOriginal();
 
-  public static Message createInChannelMessage() {
+  static Message createInChannelMessage() {
     return ImmutableMessage.builder()
-        .responseType(ResponseType.IN_CHANNEL.toString())
+        .responseType(ResponseType.IN_CHANNEL)
         .build();
   }
 
-  public static Message createEphemeralMessage() {
+  static Message createEphemeralMessage() {
     return ImmutableMessage.builder()
-        .responseType(ResponseType.EPHEMERAL.toString())
+        .responseType(ResponseType.EPHEMERAL)
         .build();
   }
 
-  public Message addText(String text) {
+  default Message addText(String text) {
     return ImmutableMessage.builder()
         .text(text)
         .attachments(this.attachments())
@@ -60,7 +61,7 @@ public abstract class Message {
         .build();
   }
 
-  public Message addAttachment(Attachment attachment) {
+  default Message addAttachment(Attachment attachment) {
     return ImmutableMessage.builder()
         .text(this.text())
         .addAttachments(attachment)
@@ -71,7 +72,9 @@ public abstract class Message {
         .build();
   }
 
-  public Message addAttachments(Attachment... attachments) {
+  default Message addAttachments(Attachment... attachments) {
+    Preconditions.checkArgument(attachments.length <= 20,
+        "Messages should contain no more than 20 attachments");
     return ImmutableMessage.builder()
         .text(this.text())
         .addAttachments(attachments)

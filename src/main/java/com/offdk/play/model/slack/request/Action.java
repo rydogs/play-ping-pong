@@ -1,26 +1,22 @@
-package com.offdk.play.model.slack.message;
-
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import org.immutables.value.Value;
-import org.immutables.value.Value.Style;
+package com.offdk.play.model.slack.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Preconditions;
+import java.util.List;
+import javax.annotation.Nullable;
+import org.immutables.value.Value;
 
 @Value.Immutable
 @JsonSerialize(as = ImmutableAction.class)
 @JsonDeserialize(as = ImmutableAction.class)
-@Style(passAnnotations = {JsonNaming.class, JsonInclude.class}, forceJacksonPropertyNames = false)
+@Value.Style(passAnnotations = {JsonNaming.class,
+    JsonInclude.class}, forceJacksonPropertyNames = false)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonInclude(Include.NON_ABSENT)
 public interface Action {
@@ -28,6 +24,7 @@ public interface Action {
   String name();
 
   @Nullable
+    // Needed for Callback
   String text();
 
   String type();
@@ -57,11 +54,12 @@ public interface Action {
   Integer minQueryLength();
 
   static Action createButton(String group, String text) {
-    return createButton(group, text, Style.Default);
+    return createButton(group, text, Style.DEFAULT);
   }
 
-  public static Action createButton(String group, String text, Style style) {
-    Preconditions.checkArgument(text.length() < 30, "Text too long for button");
+  static Action createButton(String group, String text, Style style) {
+    Preconditions.checkArgument(text.length() <= 30,
+        "Use a maximum of 30 characters or so for best results across form factors");
 
     return ImmutableAction.builder()
         .name(group)
@@ -88,18 +86,5 @@ public interface Action {
         .style(this.style())
         .confirm(confirm)
         .build();
-  }
-
-  public enum Style {
-    Default("default"), Primary("primary"), Danger("danger");
-    private final String value;
-    Style(String value) {
-    	  this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-    	  return this.value;
-    }
   }
 }

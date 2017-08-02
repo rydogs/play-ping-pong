@@ -1,7 +1,7 @@
 package com.offdk.play.web;
 
-import com.offdk.play.model.slack.command.SlackCommand;
-import com.offdk.play.model.slack.message.Message;
+import com.offdk.play.model.slack.request.Message;
+import com.offdk.play.model.slack.response.SlackCommand;
 import com.offdk.play.service.SlackChatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

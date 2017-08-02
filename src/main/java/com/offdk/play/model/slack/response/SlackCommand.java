@@ -1,4 +1,4 @@
-package com.offdk.play.model.slack.command;
+package com.offdk.play.model.slack.response;
 
 import org.immutables.value.Value;
 

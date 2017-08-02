@@ -1,4 +1,4 @@
-package com.offdk.play.model.slack.message;
+package com.offdk.play.model.slack.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -18,34 +19,34 @@ import org.immutables.value.Value.Style;
 @Style(passAnnotations = {JsonNaming.class, JsonInclude.class}, forceJacksonPropertyNames = false)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonInclude(Include.NON_ABSENT)
-public abstract class Attachment {
+public interface Attachment {
 
   @Nullable
-  public abstract String title();
+  String title();
 
-  public abstract String fallback();
+  String fallback();
 
-  public abstract String callbackId();
-
-  @Nullable
-  public abstract String color();
-
-  public abstract List<Action> actions();
+  String callbackId();
 
   @Nullable
-  public abstract String attachmentType();
+  String color();
 
-  public static Attachment createAttachment(String refId, String title, String defaultMessage) {
+  List<Action> actions();
+
+  @Nullable
+  AttachmentType attachmentType();
+
+  static Attachment createAttachment(String refId, String title, String defaultMessage) {
     return ImmutableAttachment.builder()
         .title(title)
         .fallback(defaultMessage)
         .callbackId(refId)
         .actions(Lists.newArrayList())
-        .attachmentType(AttachmentType.DEFAULT.toString())
+        .attachmentType(AttachmentType.DEFAULT)
         .build();
   }
 
-  public Attachment addAction(Action action) {
+  default Attachment addAction(Action action) {
     return ImmutableAttachment.builder()
         .title(this.title())
         .fallback(this.fallback())
@@ -55,7 +56,10 @@ public abstract class Attachment {
         .build();
   }
 
-  public Attachment addActions(Action... actions) {
+  default Attachment addActions(Action... actions) {
+    Preconditions.checkArgument(actions.length <= 5,
+        "A maximum of 5 actions per attachment may be provided");
+
     return ImmutableAttachment.builder()
         .title(this.title())
         .fallback(this.fallback())
