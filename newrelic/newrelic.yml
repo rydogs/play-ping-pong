@@ -16,7 +16,7 @@ common: &default_settings
   license_key: '9f76c3b721b65bcb9934c8a1ad3e54d01b1d1a0d'
 
   # Agent Enabled
-  # Use this setting to disable the agent instead of removing it from the startup response.
+  # Use this setting to disable the agent instead of removing it from the startup command.
   # Default is true.
   agent_enabled: true
 
