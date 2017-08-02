@@ -33,7 +33,6 @@ common: &default_settings
 
   # To enable high security, set this property to true. When in high
   # security mode, the agent will use SSL and obfuscated SQL. Additionally,
-  # request parameters and request parameters will not be sent to New Relic.
   # request parameters and message parameters will not be sent to New Relic.
   high_security: false
 
