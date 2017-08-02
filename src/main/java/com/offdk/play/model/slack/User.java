@@ -1,5 +1,7 @@
 package com.offdk.play.model.slack;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.google.common.base.MoreObjects;
 
@@ -23,5 +25,21 @@ public class User implements Identifiable {
 
   public String toString() {
     return MoreObjects.toStringHelper(this.getClass()).add("id", id).add("name", name).toString();
+  }
+
+  public boolean equals(Object o){
+      // self check
+      if (this == o)
+          return true;
+      // null check
+      if (o == null)
+          return false;
+      // type check and cast
+      if (getClass() != o.getClass())
+          return false;
+      User myUser = (User) o;
+      // field comparison
+      return Objects.equals(getId(), myUser.getId())
+              && Objects.equals(getName(), myUser.getName());	  
   }
 }
