@@ -34,6 +34,7 @@ common: &default_settings
   # To enable high security, set this property to true. When in high
   # security mode, the agent will use SSL and obfuscated SQL. Additionally,
   # request parameters and request parameters will not be sent to New Relic.
+  # request parameters and message parameters will not be sent to New Relic.
   high_security: false
 
   # Set to true to enable support for auto app naming.
@@ -277,7 +278,7 @@ common: &default_settings
 # Environment specific settings are in this section.
 # You can use the environment to override the default settings.
 # For example, to change the app_name setting.
-# Use -Dnewrelic.environment=<environment> on the Java startup response line
+# Use -Dnewrelic.environment=<environment> on the Java startup command line
 # to set the environment.
 # The default environment is production.
 
