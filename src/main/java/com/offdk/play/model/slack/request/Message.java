@@ -12,6 +12,7 @@ import com.offdk.play.model.slack.request.ImmutableMessage.Builder;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
+import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Style;
 
 @Value.Immutable
@@ -34,11 +35,15 @@ public interface Message {
   @Nullable
   ResponseType responseType();
 
-  @Nullable
-  Boolean replaceOriginal();
+  @Default
+  default Boolean replaceOriginal() {
+    return false;
+  };
 
-  @Nullable
-  Boolean deleteOriginal();
+  @Default
+  default Boolean deleteOriginal() {
+    return false;
+  };
 
 
   @Value.Check
