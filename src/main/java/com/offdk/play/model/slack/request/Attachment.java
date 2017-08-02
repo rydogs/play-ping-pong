@@ -36,6 +36,10 @@ public interface Attachment {
   @Nullable
   AttachmentType attachmentType();
 
+  static Attachment createAttachment(String refId, String title) {
+    return createAttachment(refId, title, title);
+  }
+
   static Attachment createAttachment(String refId, String title, String defaultMessage) {
     return ImmutableAttachment.builder()
         .title(title)

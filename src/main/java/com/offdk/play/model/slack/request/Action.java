@@ -24,10 +24,10 @@ public interface Action {
   String name();
 
   @Nullable
-    // Needed for Callback
+  // Needed for Callback
   String text();
 
-  String type();
+  ActionType type();
 
   @Nullable
   String value();
@@ -64,7 +64,7 @@ public interface Action {
     return ImmutableAction.builder()
         .name(group)
         .text(text)
-        .type(ActionType.BUTTON.toString())
+        .type(ActionType.BUTTON)
         .style(style)
         .value(CaseFormat.UPPER_UNDERSCORE
             .to(CaseFormat.LOWER_CAMEL, text.toUpperCase().replace(" ", "_")))
