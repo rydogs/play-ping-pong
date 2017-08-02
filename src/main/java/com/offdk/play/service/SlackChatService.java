@@ -39,6 +39,7 @@ public class SlackChatService {
             .addActions(
                 Action.createButton("accept", "Accept", Style.PRIMARY),
                 Action.createButton("refuse", "Refuse", Style.DANGER)))
+        .deleteOriginal(false)
         .build();
 
     LOGGER.info(msg.toString());
