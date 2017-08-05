@@ -1,6 +1,10 @@
 package com.offdk.play.service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -12,7 +16,6 @@ import com.offdk.play.model.game.Player;
 import com.offdk.play.model.slack.User;
 import com.offdk.play.model.slack.request.Action;
 import com.offdk.play.model.slack.request.Attachment;
-import com.offdk.play.model.slack.request.ImmutableMessage;
 import com.offdk.play.model.slack.request.Message;
 import com.offdk.play.model.slack.request.Style;
 import com.offdk.play.model.slack.response.CallbackRequest;
@@ -26,10 +29,14 @@ public class GameService {
 
   private final MatchRepository matchRepo;
   private final PlayerRepository playerRepo;
+  private Map<CallbackName, CallbackProcessor> callbackProcessors;
 
-  public GameService(MatchRepository matchRepo, PlayerRepository playerRepo) {
+  public GameService(MatchRepository matchRepo, PlayerRepository playerRepo,
+      List<CallbackProcessor> processors) {
     this.matchRepo = matchRepo;
     this.playerRepo = playerRepo;
+    this.callbackProcessors = processors.stream().collect(
+        Collectors.toMap(p -> p.name(), Function.identity()));
   }
 
   public Message challenge(SlackCommand command) {
@@ -45,19 +52,17 @@ public class GameService {
             Attachment.createAttachment(match.getId(), challengeText)
             .callbackId(match.getId())
             .addActions(
-                Action.createButton("accept", "Accept", Style.PRIMARY),
-                Action.createButton("refuse", "Refuse", Style.DANGER))
+                Action.createButton(CallbackName.ACCEPT_MATCH.toString(), "Accept", Style.PRIMARY),
+                Action.createButton(CallbackName.REFUSE_MATCH.toString(), "Refuse", Style.DANGER))
             .build())
         .build();
     return msg;
   }
 
-  public Message accept(CallbackRequest request) {
-    Match match = matchRepo.findOne(request.callbackId());
-    match.accept();
-    matchRepo.save(match);
-    return ImmutableMessage.builder().text("Responding to request: " + match)
-        .build();
+  public Message handleCallback(CallbackRequest request) {
+    //TODO: handle more than one action by combining messages
+    CallbackName name = CallbackName.valueOf(request.actions().get(0).name());
+    return callbackProcessors.get(name).process(request);
   }
 
   @VisibleForTesting

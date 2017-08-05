@@ -35,6 +35,6 @@ public class SlackCallbackController {
     String decodedRequest = URLDecoder.decode(requestStr, Charsets.UTF_8.toString());
     CallbackRequest request = objectMapper.readValue(decodedRequest, CallbackRequest.class);
     LOGGER.info("Request: {}", request);
-    return gameService.accept(request);
+    return gameService.handleCallback(request);
   }
 }
