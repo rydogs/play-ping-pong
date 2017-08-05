@@ -1,4 +1,4 @@
-package com.offdk.play.web;
+package com.offdk.play.model.slack.request.parser;
 
 import java.util.ArrayList;
 import java.util.List;
