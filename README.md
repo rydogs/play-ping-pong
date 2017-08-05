@@ -1,4 +1,4 @@
-# play-ping-pong ![Travis CI](https://travis-ci.org/rydogs/play-ping-pong.svg?branch=master)
+# play-ping-pong ![Travis CI](https://travis-ci.org/rydogs/play-ping-pong.svg?branch=master) [![Dependency Status](https://www.versioneye.com/user/projects/5985400b6725bd0076c18b82/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5985400b6725bd0076c18b82)
 A Slack intregration for ping pong using spring-boot
 
 ## Development
