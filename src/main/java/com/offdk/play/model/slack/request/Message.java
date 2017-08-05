@@ -7,9 +7,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Preconditions;
+import com.offdk.play.model.slack.request.ImmutableMessage.Builder;
+
 import java.util.List;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;
+import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Style;
 
 @Value.Immutable
@@ -32,56 +35,30 @@ public interface Message {
   @Nullable
   ResponseType responseType();
 
-  @Nullable
-  Boolean replaceOriginal();
+  @Default
+  default Boolean replaceOriginal() {
+    return false;
+  };
 
-  @Nullable
-  Boolean deleteOriginal();
+  @Default
+  default Boolean deleteOriginal() {
+    return false;
+  };
 
-  static Message createInChannelMessage() {
-    return ImmutableMessage.builder()
-        .responseType(ResponseType.IN_CHANNEL)
-        .build();
-  }
 
-  static Message createEphemeralMessage() {
-    return ImmutableMessage.builder()
-        .responseType(ResponseType.EPHEMERAL)
-        .build();
-  }
-
-  default Message addText(String text) {
-    return ImmutableMessage.builder()
-        .text(text)
-        .attachments(this.attachments())
-        .threadTimestamp(this.threadTimestamp())
-        .responseType(this.responseType())
-        .replaceOriginal(this.replaceOriginal())
-        .deleteOriginal(this.deleteOriginal())
-        .build();
-  }
-
-  default Message addAttachment(Attachment attachment) {
-    return ImmutableMessage.builder()
-        .text(this.text())
-        .addAttachments(attachment)
-        .threadTimestamp(this.threadTimestamp())
-        .responseType(this.responseType())
-        .replaceOriginal(this.replaceOriginal())
-        .deleteOriginal(this.deleteOriginal())
-        .build();
-  }
-
-  default Message addAttachments(Attachment... attachments) {
-    Preconditions.checkArgument(attachments.length <= 20,
+  @Value.Check
+  default void check() {
+    Preconditions.checkState(attachments() == null || attachments().size() <= 20,
         "Messages should contain no more than 20 attachments");
+  }
+
+  static Builder createInChannelMessage() {
     return ImmutableMessage.builder()
-        .text(this.text())
-        .addAttachments(attachments)
-        .threadTimestamp(this.threadTimestamp())
-        .responseType(this.responseType())
-        .replaceOriginal(this.replaceOriginal())
-        .deleteOriginal(this.deleteOriginal())
-        .build();
+        .responseType(ResponseType.IN_CHANNEL);
+  }
+
+  static Builder createEphemeralMessage() {
+    return ImmutableMessage.builder()
+        .responseType(ResponseType.EPHEMERAL);
   }
 }

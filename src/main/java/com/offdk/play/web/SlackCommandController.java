@@ -1,13 +1,14 @@
 package com.offdk.play.web;
 
-import com.offdk.play.model.slack.request.Message;
-import com.offdk.play.model.slack.response.SlackCommand;
-import com.offdk.play.service.SlackChatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.offdk.play.model.slack.request.Message;
+import com.offdk.play.model.slack.response.SlackCommand;
+import com.offdk.play.service.SlackChatService;
 
 @Controller
 public class SlackCommandController {
@@ -24,6 +25,6 @@ public class SlackCommandController {
   @ResponseBody
   public Message command(@SlackCommandParam SlackCommand command) {
     LOGGER.info("Request: {}" + command);
-    return chatService.respond(command);
+    return chatService.challenge(command);
   }
 }

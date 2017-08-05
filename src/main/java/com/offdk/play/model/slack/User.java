@@ -3,7 +3,6 @@ package com.offdk.play.model.slack;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.google.common.base.MoreObjects;
 
 public class User implements Identifiable {
   private final String id;
@@ -15,6 +14,7 @@ public class User implements Identifiable {
     this.name = name;
   }
 
+  @Override
   public String getId() {
     return id;
   }
@@ -23,23 +23,26 @@ public class User implements Identifiable {
     return name;
   }
 
+  // return slack user format
+  @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this.getClass()).add("id", id).add("name", name).toString();
+    return "<@" + getId() + "|" + getName() + ">";
   }
 
+  @Override
   public boolean equals(Object o){
-      // self check
-      if (this == o)
-          return true;
-      // null check
-      if (o == null)
-          return false;
-      // type check and cast
-      if (getClass() != o.getClass())
-          return false;
-      User myUser = (User) o;
-      // field comparison
-      return Objects.equals(getId(), myUser.getId())
-              && Objects.equals(getName(), myUser.getName());	  
+    // self check
+    if (this == o)
+      return true;
+    // null check
+    if (o == null)
+      return false;
+    // type check and cast
+    if (getClass() != o.getClass())
+      return false;
+    User myUser = (User) o;
+    // field comparison
+    return Objects.equals(getId(), myUser.getId())
+        && Objects.equals(getName(), myUser.getName());
   }
 }

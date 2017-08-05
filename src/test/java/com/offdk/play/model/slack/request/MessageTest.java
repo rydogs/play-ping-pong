@@ -1,7 +1,5 @@
 package com.offdk.play.model.slack.request;
 
-import static org.junit.Assert.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import java.util.List;
@@ -21,7 +19,7 @@ public class MessageTest {
 
   @Test
   public void createInChannelMessage() throws Exception {
-    Message message = Message.createInChannelMessage();
+    Message message = Message.createInChannelMessage().build();
 
     String json = mapper.writeValueAsString(message);
 
@@ -33,7 +31,7 @@ public class MessageTest {
 
   @Test
   public void createEphemeralMessage() throws Exception {
-    Message message = Message.createEphemeralMessage();
+    Message message = Message.createEphemeralMessage().build();
 
     String json = mapper.writeValueAsString(message);
 
@@ -45,7 +43,7 @@ public class MessageTest {
 
   @Test
   public void addText() throws Exception {
-    Message message = Message.createInChannelMessage().addText("ADDING TEXT");
+    Message message = Message.createInChannelMessage().text("ADDING TEXT").build();
 
     String json = mapper.writeValueAsString(message);
 
@@ -59,7 +57,7 @@ public class MessageTest {
   public void addAttachment() throws Exception {
     Attachment attachment = Attachment.createAttachment("ID", "TITLE", "DEFAULT");
 
-    Message message = Message.createInChannelMessage().addAttachment(attachment);
+    Message message = Message.createInChannelMessage().addAttachments(attachment).build();
 
     String json = mapper.writeValueAsString(message);
 
@@ -76,7 +74,7 @@ public class MessageTest {
       attachments.add(Attachment.createAttachment("ID_" + idx, "TITLE_" + idx, "DEFAULT_" + idx));
     }
 
-    Message message = Message.createInChannelMessage().addAttachments(attachments.toArray(new Attachment[0]));
+    Message message = Message.createInChannelMessage().addAllAttachments(attachments).build();
 
     String json = mapper.writeValueAsString(message);
 
@@ -86,13 +84,13 @@ public class MessageTest {
     Assert.assertEquals(2, newMessage.attachments().size());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalStateException.class)
   public void addAttachmentsTooMany() throws Exception {
     List<Attachment> attachments = Lists.newArrayList();
     for (int idx = 0; idx < 30; idx++) {
       attachments.add(Attachment.createAttachment("ID_" + idx, "TITLE_" + idx, "DEFAULT_" + idx));
     }
 
-    Message.createInChannelMessage().addAttachments(attachments.toArray(new Attachment[0]));
+    Message.createInChannelMessage().addAllAttachments(attachments).build();
   }
 }

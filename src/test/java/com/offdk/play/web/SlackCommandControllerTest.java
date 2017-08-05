@@ -33,7 +33,7 @@ public class SlackCommandControllerTest {
   @Test
   public void controllerTest() {
     Map<String, String> requestMap = ImmutableMap.<String, String> builder()
-    	    .put("token", RandomStringUtils.randomAlphabetic(10))
+        .put("token", RandomStringUtils.randomAlphabetic(10))
         .put("team_id", "T6ATNPZ88")
         .put("team_domain", "playpingpong")
         .put("channel_id", "C6CE9FBV4")
@@ -41,11 +41,11 @@ public class SlackCommandControllerTest {
         .put("user_id", "U6BMC8KT7")
         .put("user_name", "George Wang")
         .put("command", "/play")
-        .put("text", RandomStringUtils.randomAlphabetic(20))
+        .put("text", "test mention <@123232|furman>")
         .put("response_url", RandomStringUtils.randomAlphanumeric(20)).build();
     String testString = requestMap.entrySet().stream()
-            .map(e -> EQL_JOINER.join(e.getKey(), e.getValue()))
-            .collect(Collectors.joining("&"));
+        .map(e -> EQL_JOINER.join(e.getKey(), e.getValue()))
+        .collect(Collectors.joining("&"));
     ResponseEntity<String> response = restTemplate.postForEntity("/command", testString, String.class);
     assertEquals(response.getStatusCode(), HttpStatus.OK);
     assertNotNull(response.getBody());
