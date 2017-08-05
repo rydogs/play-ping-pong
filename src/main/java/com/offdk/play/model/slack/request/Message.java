@@ -61,4 +61,19 @@ public interface Message {
     return ImmutableMessage.builder()
         .responseType(ResponseType.EPHEMERAL);
   }
+
+  static Builder createWarning(String message) {
+    return createEphemeralMessage().addAttachments(
+        Attachment.warningText(message).build());
+  }
+
+  static Builder createDanger(String message) {
+    return createEphemeralMessage().addAttachments(
+        Attachment.dangerText(message).build());
+  }
+
+  static Builder createSuccess(String message) {
+    return createInChannelMessage().addAttachments(
+        Attachment.successText(message).build());
+  }
 }

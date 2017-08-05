@@ -15,13 +15,13 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(MatchException.class)
   @ResponseBody
   public Message handleMatchException(MatchException e) {
-    return Message.createEphemeralMessage().text(e.getMessage()).build();
+    return Message.createWarning(e.getMessage()).build();
   }
 
   @ResponseStatus(HttpStatus.OK)
   @ExceptionHandler(Throwable.class)
   @ResponseBody
   public Message handleException(Throwable e) {
-    return Message.createEphemeralMessage().text("Panic:" + e.getMessage()).build();
+    return Message.createDanger(e.getMessage()).build();
   }
 }

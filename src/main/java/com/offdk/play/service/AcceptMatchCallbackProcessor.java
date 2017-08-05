@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import com.offdk.play.exception.MatchException;
 import com.offdk.play.model.game.Match;
 import com.offdk.play.model.game.MatchStatus;
-import com.offdk.play.model.slack.request.ImmutableMessage;
 import com.offdk.play.model.slack.request.Message;
 import com.offdk.play.model.slack.response.CallbackRequest;
 import com.offdk.play.persistence.MatchRepository;
@@ -32,7 +31,7 @@ public class AcceptMatchCallbackProcessor implements CallbackProcessor {
         .map(m -> {
           match.accept();
           matchRepo.save(match);
-          return ImmutableMessage.builder().text("Responding to request: " + match).build();
+          return Message.createSuccess(match.toString()).build();
         }).orElseThrow(() -> MatchException.of("Match has already started"));
   }
 }

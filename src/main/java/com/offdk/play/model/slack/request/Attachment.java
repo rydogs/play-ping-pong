@@ -24,8 +24,13 @@ public interface Attachment {
   @Nullable
   String title();
 
+  @Nullable
+  String text();
+
+  @Nullable
   String fallback();
 
+  @Nullable
   String callbackId();
 
   @Nullable
@@ -47,6 +52,21 @@ public interface Attachment {
         .callbackId(refId)
         .actions(Lists.newArrayList())
         .attachmentType(AttachmentType.DEFAULT);
+  }
+
+  static ImmutableAttachment.Builder warningText(String message) {
+    return ImmutableAttachment.builder()
+        .title("Warning").text(message).color("warning");
+  }
+
+  static ImmutableAttachment.Builder dangerText(String message) {
+    return ImmutableAttachment.builder()
+        .title("Danger").text(message).color("danger");
+  }
+
+  static ImmutableAttachment.Builder successText(String message) {
+    return ImmutableAttachment.builder()
+        .title("Success").text(message).color("good");
   }
 
   @Value.Check
