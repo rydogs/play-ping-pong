@@ -1,4 +1,4 @@
-package com.offdk.play.web;
+package com.offdk.play.model.slack.request.parser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.offdk.play.model.slack.User;
+import com.offdk.play.model.slack.request.parser.UserParser;
 
 public class UserParserTest {
   private UserParser actualResult;
