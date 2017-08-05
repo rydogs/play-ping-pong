@@ -3,12 +3,11 @@ package com.offdk.play.rating;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.offdk.play.model.game.Match;
+import com.offdk.play.model.game.MatchPlayer;
 import com.offdk.play.model.game.MatchStatus;
-import com.offdk.play.model.game.Player;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.Map.Entry;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -16,7 +15,7 @@ import org.springframework.util.CollectionUtils;
  */
 public class EloRatingCalculator implements RatingCalculator {
 
-  private static final int DEFAULT_RATING = 1500;
+  private static final BigDecimal DEFAULT_RATING = BigDecimal.valueOf(1500);
   private static final int K_FACTOR = 20;
 
   @Override
@@ -28,17 +27,17 @@ public class EloRatingCalculator implements RatingCalculator {
   public List<Rating> calculate(Match match) {
     Preconditions.checkNotNull(match, "Match cannot be null");
     Preconditions
-        .checkArgument(!CollectionUtils.isEmpty(match.getPlayers()), "A match must have players");
+    .checkArgument(!CollectionUtils.isEmpty(match.getPlayers()), "A match must have players");
     Preconditions
-        .checkArgument(match.getPlayers().size() == 2, "The ELO algorithm requires two players");
+    .checkArgument(match.getPlayers().size() == 2, "The ELO algorithm requires two players");
     Preconditions.checkState(MatchStatus.COMPLETED.equals(match.getStatus()),
         "A match must be completed to calculate new ratings");
 
-    Entry<Player, Integer> playerOne = match.getPlayersWithScore().get(0);
-    Entry<Player, Integer> playerTwo = match.getPlayersWithScore().get(1);
+    MatchPlayer playerOne = match.getChallengers().get(0);
+    MatchPlayer playerTwo = match.getChallenged().get(0);
 
-    BigDecimal playerOneCurrentRating = getCurrentRating(playerOne.getKey());
-    BigDecimal playerTwoCurrentRating = getCurrentRating(playerTwo.getKey());
+    BigDecimal playerOneCurrentRating = playerOne.getRating().orElse(DEFAULT_RATING);
+    BigDecimal playerTwoCurrentRating = playerTwo.getRating().orElse(DEFAULT_RATING);
 
     BigDecimal playerOneScore = calculateScore(playerOneCurrentRating);
     BigDecimal playerTwoScore = calculateScore(playerTwoCurrentRating);
@@ -46,19 +45,11 @@ public class EloRatingCalculator implements RatingCalculator {
     BigDecimal playerOneExp = calculateExpectedWinPercentage(playerOneScore, playerTwoScore);
     BigDecimal playerTwoExp = calculateExpectedWinPercentage(playerTwoScore, playerOneScore);
 
-    EloRating playerOneNewRating =
-        generateNewRating(playerOneCurrentRating, playerOneExp,
-            playerOne.getValue() > playerTwo.getValue());
-    EloRating playerTwoNewRating =
-        generateNewRating(playerTwoCurrentRating, playerTwoExp,
-            playerTwo.getValue() > playerOne.getValue());
+    boolean playerOneWon = playerOne.getScore().get() > playerTwo.getScore().get();
+    EloRating playerOneNewRating = generateNewRating(playerOneCurrentRating, playerOneExp, playerOneWon);
+    EloRating playerTwoNewRating = generateNewRating(playerTwoCurrentRating, playerTwoExp, !playerOneWon);
 
     return ImmutableList.of(playerOneNewRating, playerTwoNewRating);
-  }
-
-  private BigDecimal getCurrentRating(Player player) {
-    return player.getCurrentRating(RatingType.ELO).map(Rating::getRating)
-        .orElse(BigDecimal.valueOf(DEFAULT_RATING));
   }
 
   private BigDecimal calculateScore(BigDecimal rating) {

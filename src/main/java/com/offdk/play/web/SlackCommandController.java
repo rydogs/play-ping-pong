@@ -8,23 +8,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.offdk.play.model.slack.request.Message;
 import com.offdk.play.model.slack.response.SlackCommand;
-import com.offdk.play.service.SlackChatService;
+import com.offdk.play.service.GameService;
 
 @Controller
 public class SlackCommandController {
 
   private final Logger LOGGER = LoggerFactory.getLogger(SlackCommandController.class);
 
-  private final SlackChatService chatService;
+  private final GameService gameService;
 
-  public SlackCommandController(SlackChatService chatService) {
-    this.chatService = chatService;
+  public SlackCommandController(GameService gameService) {
+    this.gameService = gameService;
   }
 
   @PostMapping("/command")
   @ResponseBody
   public Message command(@SlackCommandParam SlackCommand command) {
-    LOGGER.info("Request: {}" + command);
-    return chatService.challenge(command);
+    LOGGER.info("Request: {}", command);
+    return gameService.challenge(command);
   }
 }

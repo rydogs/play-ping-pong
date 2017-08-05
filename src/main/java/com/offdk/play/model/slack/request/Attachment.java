@@ -36,40 +36,22 @@ public interface Attachment {
   @Nullable
   AttachmentType attachmentType();
 
-  static Attachment createAttachment(String refId, String title) {
+  static ImmutableAttachment.Builder createAttachment(String refId, String title) {
     return createAttachment(refId, title, title);
   }
 
-  static Attachment createAttachment(String refId, String title, String defaultMessage) {
+  static ImmutableAttachment.Builder createAttachment(String refId, String title, String defaultMessage) {
     return ImmutableAttachment.builder()
         .title(title)
         .fallback(defaultMessage)
         .callbackId(refId)
         .actions(Lists.newArrayList())
-        .attachmentType(AttachmentType.DEFAULT)
-        .build();
+        .attachmentType(AttachmentType.DEFAULT);
   }
 
-  default Attachment addAction(Action action) {
-    return ImmutableAttachment.builder()
-        .title(this.title())
-        .fallback(this.fallback())
-        .callbackId(this.callbackId())
-        .addActions(action)
-        .attachmentType(this.attachmentType())
-        .build();
-  }
-
-  default Attachment addActions(Action... actions) {
-    Preconditions.checkArgument(actions.length <= 5,
+  @Value.Check
+  default void check() {
+    Preconditions.checkState(this.actions().size() <= 5,
         "A maximum of 5 actions per attachment may be provided");
-
-    return ImmutableAttachment.builder()
-        .title(this.title())
-        .fallback(this.fallback())
-        .callbackId(this.callbackId())
-        .addActions(actions)
-        .attachmentType(this.attachmentType())
-        .build();
   }
 }

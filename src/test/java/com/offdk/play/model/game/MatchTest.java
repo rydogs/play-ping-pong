@@ -3,7 +3,6 @@ package com.offdk.play.model.game;
 import com.google.common.collect.Lists;
 import com.offdk.play.model.slack.User;
 import java.util.List;
-import java.util.Map.Entry;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,69 +19,59 @@ public class MatchTest {
   }
 
   @Test
-  public void getStatus() throws Exception {
-    Match match = new Match(Lists.newArrayList(playerOne, playerTwo));
+  public void getStatusDefaultTest() throws Exception {
+    Match match = new Match("", Lists.newArrayList(playerOne, playerTwo));
 
     Assert.assertTrue(MatchStatus.CHALLENGED.equals(match.getStatus()));
   }
 
   @Test
-  public void setStatus() throws Exception {
-    Match match = new Match(Lists.newArrayList(playerOne, playerTwo));
-    match.setStatus(MatchStatus.ACCEPTED);
+  public void getPlayersTest() throws Exception {
+    Match match = new Match("", Lists.newArrayList(playerOne, playerTwo));
 
-    Assert.assertTrue(MatchStatus.ACCEPTED.equals(match.getStatus()));
-  }
-
-  @Test
-  public void getPlayers() throws Exception {
-    Match match = new Match(Lists.newArrayList(playerOne, playerTwo));
-
-    List<Player> players = match.getPlayers();
+    List<MatchPlayer> players = match.getPlayers();
 
     Assert.assertEquals(2, players.size());
 
-    Assert.assertEquals(playerOne, players.get(0));
-    Assert.assertEquals(playerTwo, players.get(1));
+    Assert.assertEquals(playerOne.getId(), players.get(0).getId());
+    Assert.assertEquals(playerTwo.getId(), players.get(1).getId());
   }
 
   @Test
-  public void getPlayersWithScoreInChallengedState() throws Exception {
-    Match match = new Match(Lists.newArrayList(playerOne, playerTwo));
+  public void getPlayersWithScoreInChallengedStateTest() throws Exception {
+    Match match = new Match("", Lists.newArrayList(playerOne, playerTwo));
 
-    List<Entry<Player, Integer>> players = match.getPlayersWithScore();
+    List<MatchPlayer> players = match.getPlayers();
 
     Assert.assertEquals(2, players.size());
 
-    Assert.assertEquals(playerOne, players.get(0).getKey());
-    Assert.assertEquals(0, players.get(0).getValue().intValue());
+    Assert.assertEquals(playerOne.getId(), players.get(0).getId());
+    Assert.assertFalse(players.get(0).getScore().isPresent());
 
-    Assert.assertEquals(playerTwo, players.get(1).getKey());
-    Assert.assertEquals(0, players.get(1).getValue().intValue());
+    Assert.assertEquals(playerTwo.getId(), players.get(1).getId());
+    Assert.assertFalse(players.get(1).getScore().isPresent());
   }
 
-  @Test(expected = IllegalStateException.class)
-  public void addScoreInNonCompletedState() throws Exception {
-    Match match = new Match(Lists.newArrayList(playerOne, playerTwo));
-    match.addScore(playerOne, 21);
-    match.addScore(playerTwo, 18);
+  @Test(expected = IllegalArgumentException.class)
+  public void reportScoreWrongNumberTest() throws Exception {
+    Match match = new Match("", Lists.newArrayList(playerOne, playerTwo));
+    match.reportScores(Lists.newArrayList(21, 18, 8));
   }
 
   @Test
-  public void getPlayersWithScoreInCompletedState() throws Exception {
-    Match match = new Match(Lists.newArrayList(playerOne, playerTwo));
-    match.setStatus(MatchStatus.COMPLETED);
-    match.addScore(playerOne, 21);
-    match.addScore(playerTwo, 18);
+  public void getPlayersWithScoreInCompletedStateTest() throws Exception {
+    Match match = new Match("", Lists.newArrayList(playerOne, playerTwo));
+    match.reportScores(Lists.newArrayList(21, 18));
 
-    List<Entry<Player, Integer>> players = match.getPlayersWithScore();
+    List<MatchPlayer> players = match.getPlayers();
 
+    Assert.assertEquals(MatchStatus.COMPLETED, match.getStatus());
     Assert.assertEquals(2, players.size());
 
-    Assert.assertEquals(playerOne, players.get(0).getKey());
-    Assert.assertEquals(21, players.get(0).getValue().intValue());
+    Assert.assertEquals(playerOne.getId(), players.get(0).getId());
+    Assert.assertEquals(21, players.get(0).getScore().get().intValue());
 
-    Assert.assertEquals(playerTwo, players.get(1).getKey());
-    Assert.assertEquals(18, players.get(1).getValue().intValue());
+    Assert.assertEquals(playerTwo.getId(), players.get(1).getId());
+    Assert.assertEquals(18, players.get(1).getScore().get().intValue());
   }
 }
