@@ -32,6 +32,6 @@ public class AcceptMatchCallbackProcessor implements CallbackProcessor {
           m.accept();
           matchRepo.save(m);
           return Message.createSuccess(m.acceptMatchText()).build();
-        }).getOrElseThrow(() -> MatchException.of("Match has already started"));
+        }).getOrElseThrow(() -> MatchException.of("Match can not be started"));
   }
 }

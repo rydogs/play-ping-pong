@@ -32,6 +32,6 @@ public class RefuseMatchCallbackPrecessor implements CallbackProcessor {
           m.refuse();
           matchRepo.save(m);
           return Message.createSuccess(m.refuseMatchText()).build();
-        }).getOrElseThrow(() -> MatchException.of("Match has already started"));
+        }).getOrElseThrow(() -> MatchException.of("Match can not be refused"));
   }
 }
