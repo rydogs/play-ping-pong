@@ -25,8 +25,6 @@ import com.offdk.play.persistence.PlayerRepository;
 
 @Service
 public class GameService {
-  private static final String CHALLENGE_FMT = "%s challenged %s for a game.";
-
   private final MatchRepository matchRepo;
   private final PlayerRepository playerRepo;
   private Map<CallbackName, CallbackProcessor> callbackProcessors;
@@ -41,15 +39,16 @@ public class GameService {
 
   public Message challenge(SlackCommand command) {
     Preconditions.checkState(command.mentionedUsers().size() > 0, "Must mention another user to challenge");
+    Preconditions.checkState(
+        !command.mentionedUsers().stream().anyMatch(u -> u.equals(command.commandUser())),
+        "Silly, you should challenge yourself elsewhere...");
     String teamId = command.team().getId();
     Player challenger = findOrCreate(teamId, command.commandUser());
     Player challenged = findOrCreate(teamId, command.mentionedUsers().get(0));
     Match match = createMatch(teamId, challenger, challenged);
-    String challengeText = String.format(CHALLENGE_FMT, challenger.getUser(), challenged.getUser());
     Message msg = Message.createInChannelMessage()
-        .text("Challenger " + challenger + ", Challenged: " + challenged)
         .addAttachments(
-            Attachment.createAttachment(match.getId(), challengeText)
+            Attachment.createAttachment(match.getId(), match.challengeText())
             .callbackId(match.getId())
             .addActions(
                 Action.createButton(CallbackName.ACCEPT_MATCH.toString(), "Accept", Style.PRIMARY),

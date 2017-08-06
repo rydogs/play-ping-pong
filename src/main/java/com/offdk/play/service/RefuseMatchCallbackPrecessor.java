@@ -10,16 +10,16 @@ import com.offdk.play.persistence.MatchRepository;
 import io.vavr.control.Try;
 
 @Component
-public class AcceptMatchCallbackProcessor implements CallbackProcessor {
+public class RefuseMatchCallbackPrecessor implements CallbackProcessor {
   private final MatchRepository matchRepo;
 
-  public AcceptMatchCallbackProcessor(MatchRepository matchRepo) {
+  public RefuseMatchCallbackPrecessor(MatchRepository matchRepo) {
     this.matchRepo = matchRepo;
   }
 
   @Override
   public CallbackName name() {
-    return CallbackName.ACCEPT_MATCH;
+    return CallbackName.REFUSE_MATCH;
   }
 
   @Override
@@ -31,7 +31,7 @@ public class AcceptMatchCallbackProcessor implements CallbackProcessor {
         .map(m -> {
           m.accept();
           matchRepo.save(m);
-          return Message.createSuccess(m.acceptMatchText()).build();
+          return Message.createSuccess(m.refuseMatchText()).build();
         }).getOrElseThrow(() -> MatchException.of("Match has already started"));
   }
 }

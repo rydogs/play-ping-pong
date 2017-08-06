@@ -7,20 +7,21 @@ import org.springframework.data.annotation.PersistenceConstructor;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.MoreObjects;
+import com.offdk.play.model.slack.User;
 import com.offdk.play.rating.RatingType;
 
 import io.vavr.control.Try;
 
 public class MatchPlayer {
-  private final String id;
+  private final User user;
   private final MatchPlayerType type;
   private Optional<Integer> score;
   private Optional<BigDecimal> rating;
 
   // Needed to allow spring-data to serialize data to object
   @PersistenceConstructor
-  MatchPlayer(String id, MatchPlayerType type, Optional<Integer> score, Optional<BigDecimal> rating) {
-    this.id = id;
+  MatchPlayer(User user, MatchPlayerType type, Optional<Integer> score, Optional<BigDecimal> rating) {
+    this.user = user;
     this.type = type;
     this.score = score;
     this.rating = rating;
@@ -28,7 +29,7 @@ public class MatchPlayer {
 
   @VisibleForTesting
   MatchPlayer(Player player, MatchPlayerType type, Integer score) {
-    this.id = player.getId();
+    this.user = player.getUser();
     // TODO: remove hard coding to rating type or remove multiple rating on player
     this.rating = Try.of(() -> player.getCurrentRating().get(RatingType.ELO).getRating()).toJavaOptional();
     this.type = type;
@@ -47,8 +48,8 @@ public class MatchPlayer {
     return type;
   }
 
-  public String getId() {
-    return id;
+  public User getUser() {
+    return user;
   }
 
   public Optional<BigDecimal> getRating() {
@@ -57,7 +58,7 @@ public class MatchPlayer {
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(MatchPlayer.class).add("id", id).add("type", type)
+    return MoreObjects.toStringHelper(MatchPlayer.class).add("user", user).add("type", type)
         .add("score", score).toString();
   }
 

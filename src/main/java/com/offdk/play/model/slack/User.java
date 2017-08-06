@@ -42,7 +42,6 @@ public class User implements Identifiable {
       return false;
     User myUser = (User) o;
     // field comparison
-    return Objects.equals(getId(), myUser.getId())
-        && Objects.equals(getName(), myUser.getName());
+    return Objects.equals(getId(), myUser.getId());
   }
 }

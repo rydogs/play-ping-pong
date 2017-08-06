@@ -3,14 +3,24 @@ package com.offdk.play.model.game;
 import io.vavr.collection.Stream;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Joiner;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.offdk.play.model.slack.User;
 
 public class Match {
+  static final Joiner SPACE_JOINER = Joiner.on(" ");
+  static final String CHALLENGE_FMT = "%s challenged %s for a game.";
+  static final String CHALLENGE_ACCEPT_FMT = "%s accepted %s's challenge";
+  static final String CHALLENGE_REFUSE_FMT = "%s refused %s's challenge";
+
   @Id
   private String id;
   private final String slackTeamId;
@@ -59,6 +69,10 @@ public class Match {
     this.status = MatchStatus.ACCEPTED;
   }
 
+  public void reject() {
+    this.status = MatchStatus.REFUSED;
+  }
+
   public void reportScores(Integer... scores) {
     reportScores(Lists.newArrayList(scores));
   }
@@ -74,13 +88,41 @@ public class Match {
     return Stream.concat(players).filter(p -> MatchPlayerType.CHALLENGER.equals(p.getType())).toJavaList();
   }
 
+  public List<User> getChallengerUsers() {
+    return toSlackUser(getChallengers());
+  }
+
   public List<MatchPlayer> getChallenged() {
     return Stream.concat(players).filter(p -> MatchPlayerType.CHALLENGED.equals(p.getType())).toJavaList();
+  }
+
+  public List<User> getChallengedUsers() {
+    return toSlackUser(getChallenged());
   }
 
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(Match.class).add("id", id).add("status", status)
         .add("players", players).toString();
+  }
+
+  public String challengeText() {
+    return String.format(CHALLENGE_FMT, SPACE_JOINER.join(getChallengerUsers()),
+        SPACE_JOINER.join(getChallengedUsers()));
+  }
+
+  public String acceptMatchText() {
+    return String.format(CHALLENGE_ACCEPT_FMT, SPACE_JOINER.join(getChallengedUsers()),
+        SPACE_JOINER.join(getChallengerUsers()));
+  }
+
+  public String refuseMatchText() {
+    return String.format(CHALLENGE_REFUSE_FMT, SPACE_JOINER.join(getChallengedUsers()),
+        SPACE_JOINER.join(getChallengerUsers()));
+  }
+
+  @VisibleForTesting
+  static List<User> toSlackUser(List<MatchPlayer> players) {
+    return players.stream().map(p -> p.getUser()).collect(Collectors.toList());
   }
 }

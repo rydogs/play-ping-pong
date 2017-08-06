@@ -33,8 +33,8 @@ public class MatchTest {
 
     Assert.assertEquals(2, players.size());
 
-    Assert.assertEquals(playerOne.getId(), players.get(0).getId());
-    Assert.assertEquals(playerTwo.getId(), players.get(1).getId());
+    Assert.assertEquals(playerOne.getId(), players.get(0).getUser().getId());
+    Assert.assertEquals(playerTwo.getId(), players.get(1).getUser().getId());
   }
 
   @Test
@@ -45,10 +45,10 @@ public class MatchTest {
 
     Assert.assertEquals(2, players.size());
 
-    Assert.assertEquals(playerOne.getId(), players.get(0).getId());
+    Assert.assertEquals(playerOne.getId(), players.get(0).getUser().getId());
     Assert.assertFalse(players.get(0).getScore().isPresent());
 
-    Assert.assertEquals(playerTwo.getId(), players.get(1).getId());
+    Assert.assertEquals(playerTwo.getId(), players.get(1).getUser().getId());
     Assert.assertFalse(players.get(1).getScore().isPresent());
   }
 
@@ -68,10 +68,10 @@ public class MatchTest {
     Assert.assertEquals(MatchStatus.COMPLETED, match.getStatus());
     Assert.assertEquals(2, players.size());
 
-    Assert.assertEquals(playerOne.getId(), players.get(0).getId());
+    Assert.assertEquals(playerOne.getId(), players.get(0).getUser().getId());
     Assert.assertEquals(21, players.get(0).getScore().get().intValue());
 
-    Assert.assertEquals(playerTwo.getId(), players.get(1).getId());
+    Assert.assertEquals(playerTwo.getId(), players.get(1).getUser().getId());
     Assert.assertEquals(18, players.get(1).getScore().get().intValue());
   }
 }
