@@ -24,8 +24,13 @@ public interface Attachment {
   @Nullable
   String title();
 
+  @Nullable
+  String text();
+
+  @Nullable
   String fallback();
 
+  @Nullable
   String callbackId();
 
   @Nullable
@@ -36,40 +41,37 @@ public interface Attachment {
   @Nullable
   AttachmentType attachmentType();
 
-  static Attachment createAttachment(String refId, String title) {
+  static ImmutableAttachment.Builder createAttachment(String refId, String title) {
     return createAttachment(refId, title, title);
   }
 
-  static Attachment createAttachment(String refId, String title, String defaultMessage) {
+  static ImmutableAttachment.Builder createAttachment(String refId, String title, String defaultMessage) {
     return ImmutableAttachment.builder()
         .title(title)
         .fallback(defaultMessage)
         .callbackId(refId)
         .actions(Lists.newArrayList())
-        .attachmentType(AttachmentType.DEFAULT)
-        .build();
+        .attachmentType(AttachmentType.DEFAULT);
   }
 
-  default Attachment addAction(Action action) {
+  static ImmutableAttachment.Builder warningText(String message) {
     return ImmutableAttachment.builder()
-        .title(this.title())
-        .fallback(this.fallback())
-        .callbackId(this.callbackId())
-        .addActions(action)
-        .attachmentType(this.attachmentType())
-        .build();
+        .title("Warning").text(message).color("warning");
   }
 
-  default Attachment addActions(Action... actions) {
-    Preconditions.checkArgument(actions.length <= 5,
+  static ImmutableAttachment.Builder dangerText(String message) {
+    return ImmutableAttachment.builder()
+        .title("Danger").text(message).color("danger");
+  }
+
+  static ImmutableAttachment.Builder successText(String message) {
+    return ImmutableAttachment.builder()
+        .title("Success").text(message).color("good");
+  }
+
+  @Value.Check
+  default void check() {
+    Preconditions.checkState(this.actions().size() <= 5,
         "A maximum of 5 actions per attachment may be provided");
-
-    return ImmutableAttachment.builder()
-        .title(this.title())
-        .fallback(this.fallback())
-        .callbackId(this.callbackId())
-        .addActions(actions)
-        .attachmentType(this.attachmentType())
-        .build();
   }
 }

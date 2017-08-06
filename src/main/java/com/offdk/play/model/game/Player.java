@@ -24,6 +24,7 @@ public class Player {
 
   @VisibleForTesting
   Player(String slackTeamId, User user) {
+    this.id = user.getId();
     this.slackTeamId = slackTeamId;
     this.user = user;
     this.currentRating = Maps.newHashMap();
@@ -45,6 +46,10 @@ public class Player {
     return user;
   }
 
+  public String getId() {
+    return id;
+  }
+
   public void updateCurrentRatings(RatingType ratingType, Rating rating) {
     currentRating.put(ratingType, rating);
   }
@@ -57,6 +62,7 @@ public class Player {
     return new Player(slackTeamId, user);
   }
 
+  @Override
   public String toString() {
     return MoreObjects.toStringHelper(this.getClass()).add("id", id).add("user", user)
         .add("teamId", slackTeamId).toString();

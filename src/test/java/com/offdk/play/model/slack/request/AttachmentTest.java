@@ -19,7 +19,7 @@ public class AttachmentTest {
 
   @Test
   public void createAttachment() throws Exception {
-    Attachment attachment = Attachment.createAttachment("ID", "TITLE", "DEFAULT");
+    Attachment attachment = Attachment.createAttachment("ID", "TITLE", "DEFAULT").build();
 
     String json = mapper.writeValueAsString(attachment);
 
@@ -34,7 +34,8 @@ public class AttachmentTest {
   public void addAction() throws Exception {
     Action action = Action.createButton("GROUP", "TEXT");
 
-    Attachment attachment = Attachment.createAttachment("ID", "TITLE", "DEFAULT").addAction(action);
+    Attachment attachment = Attachment.createAttachment("ID", "TITLE", "DEFAULT")
+        .addActions(action).build();
 
     String json = mapper.writeValueAsString(attachment);
 
@@ -52,7 +53,7 @@ public class AttachmentTest {
     }
 
     Attachment attachment = Attachment.createAttachment("ID", "TITLE", "DEFAULT")
-        .addActions(actions.toArray(new Action[0]));
+        .addAllActions(actions).build();
 
     String json = mapper.writeValueAsString(attachment);
 
@@ -62,7 +63,7 @@ public class AttachmentTest {
     Assert.assertEquals(2, newAttachment.actions().size());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalStateException.class)
   public void addActionsTooManyActions() throws Exception {
     List<Action> actions = Lists.newArrayList();
     for (int idx = 0; idx < 6; idx++) {
@@ -70,6 +71,6 @@ public class AttachmentTest {
     }
 
     Attachment.createAttachment("ID", "TITLE", "DEFAULT")
-        .addActions(actions.toArray(new Action[0]));
+    .addActions(actions.toArray(new Action[0])).build();
   }
 }

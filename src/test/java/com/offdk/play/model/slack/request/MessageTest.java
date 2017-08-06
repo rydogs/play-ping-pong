@@ -55,7 +55,7 @@ public class MessageTest {
 
   @Test
   public void addAttachment() throws Exception {
-    Attachment attachment = Attachment.createAttachment("ID", "TITLE", "DEFAULT");
+    Attachment attachment = Attachment.createAttachment("ID", "TITLE", "DEFAULT").build();
 
     Message message = Message.createInChannelMessage().addAttachments(attachment).build();
 
@@ -71,7 +71,8 @@ public class MessageTest {
   public void addAttachments() throws Exception {
     List<Attachment> attachments = Lists.newArrayList();
     for (int idx = 0; idx < 2; idx++) {
-      attachments.add(Attachment.createAttachment("ID_" + idx, "TITLE_" + idx, "DEFAULT_" + idx));
+      attachments.add(
+          Attachment.createAttachment("ID_" + idx, "TITLE_" + idx, "DEFAULT_" + idx).build());
     }
 
     Message message = Message.createInChannelMessage().addAllAttachments(attachments).build();
@@ -88,7 +89,8 @@ public class MessageTest {
   public void addAttachmentsTooMany() throws Exception {
     List<Attachment> attachments = Lists.newArrayList();
     for (int idx = 0; idx < 30; idx++) {
-      attachments.add(Attachment.createAttachment("ID_" + idx, "TITLE_" + idx, "DEFAULT_" + idx));
+      attachments.add(
+          Attachment.createAttachment("ID_" + idx, "TITLE_" + idx, "DEFAULT_" + idx).build());
     }
 
     Message.createInChannelMessage().addAllAttachments(attachments).build();

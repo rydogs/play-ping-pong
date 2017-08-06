@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.offdk.play.model.game.Player;
 
-public interface PlayerRepository extends CrudRepository<Player, Long> {
+public interface PlayerRepository extends CrudRepository<Player, String> {
   Optional<Player> findOneByUserId(String userId);
 }
