@@ -25,16 +25,16 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 class WebConfig extends WebMvcConfigurerAdapter {
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-      argumentResolvers.add(new SlackCommandParamHandler());
+    argumentResolvers.add(new SlackCommandParamHandler());
   }
 
   @Bean
   @Primary
   public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
     return builder.modulesToInstall(new ParameterNamesModule(JsonCreator.Mode.PROPERTIES),
-        new Jdk8Module(), new JavaTimeModule(), new GuavaModule())
-      .serializationInclusion(JsonInclude.Include.NON_EMPTY)
-      .featuresToEnable(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN)
-      .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).build();
+        new Jdk8Module().configureAbsentsAsNulls(true), new JavaTimeModule(), new GuavaModule())
+        .serializationInclusion(JsonInclude.Include.NON_EMPTY)
+        .featuresToEnable(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN)
+        .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).build();
   }
 }
