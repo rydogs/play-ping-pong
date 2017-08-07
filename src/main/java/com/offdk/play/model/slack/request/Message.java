@@ -73,7 +73,7 @@ public interface Message {
   }
 
   static Builder createSuccess(String message) {
-    return createInChannelMessage().addAttachments(
+    return createInChannelMessage().replaceOriginal(true).addAttachments(
         Attachment.successText(message).build());
   }
 }
