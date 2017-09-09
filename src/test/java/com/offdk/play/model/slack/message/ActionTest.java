@@ -1,6 +1,10 @@
-package com.offdk.play.model.slack.request;
+package com.offdk.play.model.slack.message;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.offdk.play.model.slack.message.Action;
+import com.offdk.play.model.slack.message.Confirm;
+import com.offdk.play.model.slack.message.Style;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

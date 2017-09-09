@@ -8,7 +8,8 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.CharSource;
-import com.offdk.play.model.slack.response.SlackCommand;
+import com.offdk.play.model.slack.request.SlackCommand;
+
 import io.vavr.control.Try;
 import java.io.BufferedReader;
 import java.util.Map;

@@ -1,6 +1,8 @@
-package com.offdk.play.model.slack.request;
+package com.offdk.play.model.slack.message;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.offdk.play.model.slack.message.Confirm;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,23 +12,24 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class OptionTest {
+public class ConfirmTest {
 
   @Autowired
   private ObjectMapper mapper;
 
   @Test
   public void testBuilder() throws Exception {
-    Option option = ImmutableOption.builder()
+    Confirm confirm = ImmutableConfirm.builder()
         .text("TEXT")
-        .value("VALUE")
-        .description("DESCRIPTION")
+        .title("TITLE")
+        .okText("OK")
+        .dismissText("DIMISS")
         .build();
 
-    String json = mapper.writeValueAsString(option);
+    String json = mapper.writeValueAsString(confirm);
 
-    Option newOption = mapper.readValue(json, Option.class);
+    Confirm newConfirm = mapper.readValue(json, Confirm.class);
 
-    Assert.assertTrue(option.equals(newOption));
+    Assert.assertTrue(confirm.equals(newConfirm));
   }
 }

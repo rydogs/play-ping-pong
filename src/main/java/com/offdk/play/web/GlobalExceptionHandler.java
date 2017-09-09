@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.offdk.play.exception.MatchException;
-import com.offdk.play.model.slack.request.Message;
+import com.offdk.play.model.slack.message.Message;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

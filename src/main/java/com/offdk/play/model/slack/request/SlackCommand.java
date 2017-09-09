@@ -1,4 +1,4 @@
-package com.offdk.play.model.slack.response;
+package com.offdk.play.model.slack.request;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,15 +10,18 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.offdk.play.model.slack.Channel;
 import com.offdk.play.model.slack.Team;
 import com.offdk.play.model.slack.User;
+import com.offdk.play.model.slack.request.parser.SanitizedTextParser;
 import com.offdk.play.model.slack.request.parser.SubCommandParser;
 import com.offdk.play.model.slack.request.parser.UserParser;
+import com.offdk.play.model.slack.request.ImmutableSlackCommand;
 
 @Value.Immutable
 @JsonSerialize(as = ImmutableSlackCommand.class)
 @JsonDeserialize(as = ImmutableSlackCommand.class)
 public interface SlackCommand {
-  static final UserParser userParser = new UserParser();
-  static final SubCommandParser subCommandParser = new SubCommandParser();
+  final static UserParser userParser = new UserParser();
+  final static SubCommandParser subCommandParser = new SubCommandParser();
+  final static SanitizedTextParser santizedTextParser = new SanitizedTextParser();
 
   String token();
 
@@ -40,5 +43,9 @@ public interface SlackCommand {
 
   default Optional<SubCommand> subCommand() {
     return subCommandParser.apply(text());
+  }
+
+  default String santizedText() {
+    return santizedTextParser.apply(text());
   }
 }

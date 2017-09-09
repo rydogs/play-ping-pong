@@ -1,4 +1,4 @@
-package com.offdk.play.model.slack.response;
+package com.offdk.play.model.slack.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -9,7 +9,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.offdk.play.model.slack.Channel;
 import com.offdk.play.model.slack.Team;
 import com.offdk.play.model.slack.User;
-import com.offdk.play.model.slack.request.Action;
+import com.offdk.play.model.slack.message.Action;
+import com.offdk.play.model.slack.request.ImmutableCallbackRequest;
+
 import java.util.List;
 import org.immutables.value.Value;
 import org.immutables.value.Value.Style;

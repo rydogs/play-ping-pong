@@ -3,8 +3,8 @@ package com.offdk.play.service;
 import org.springframework.stereotype.Component;
 
 import com.offdk.play.exception.MatchException;
-import com.offdk.play.model.slack.request.Message;
-import com.offdk.play.model.slack.response.CallbackRequest;
+import com.offdk.play.model.slack.message.Message;
+import com.offdk.play.model.slack.request.CallbackRequest;
 import com.offdk.play.persistence.MatchRepository;
 
 import io.vavr.control.Try;
@@ -18,7 +18,7 @@ public class RefuseMatchCallbackPrecessor implements CallbackProcessor {
   }
 
   @Override
-  public CallbackName name() {
+  public CallbackName callback() {
     return CallbackName.REFUSE_MATCH;
   }
 

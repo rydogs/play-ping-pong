@@ -1,14 +1,14 @@
-package com.offdk.play.model.slack.request;
+package com.offdk.play.model.slack.message;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-enum ResponseType {
-  IN_CHANNEL("in_channel"),
-  EPHEMERAL("ephemeral");
+enum ActionType {
+  BUTTON("button"),
+  SELECT("select");
 
   private final String value;
 
-  ResponseType(String value) {
+  ActionType(String value) {
     this.value = value;
   }
 

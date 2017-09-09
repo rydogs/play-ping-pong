@@ -1,4 +1,4 @@
-package com.offdk.play.model.slack.request;
+package com.offdk.play.model.slack.message;
 
 import javax.annotation.Nullable;
 
@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.offdk.play.model.slack.message.ImmutableConfirm;
 
 @Value.Immutable
 @JsonSerialize(as = ImmutableConfirm.class)

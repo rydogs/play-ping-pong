@@ -6,7 +6,7 @@ import com.google.common.io.CharStreams;
 import com.offdk.play.model.slack.Channel;
 import com.offdk.play.model.slack.Team;
 import com.offdk.play.model.slack.User;
-import com.offdk.play.model.slack.response.ImmutableSlackCommand;
+import com.offdk.play.model.slack.request.ImmutableSlackCommand;
 import io.vavr.control.Try;
 import java.net.URLDecoder;
 import java.util.Map;
@@ -19,6 +19,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
 
+  @Override
   public Object resolveArgument(MethodParameter param, ModelAndViewContainer container,
       NativeWebRequest request,
       WebDataBinderFactory dataBinderFactory) throws Exception {
@@ -52,6 +53,7 @@ public class SlackCommandParamHandler implements HandlerMethodArgumentResolver {
         .build();
   }
 
+  @Override
   public boolean supportsParameter(MethodParameter param) {
     return param.hasParameterAnnotation(SlackCommandParam.class);
   }

@@ -4,7 +4,7 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Function;
 
-import com.offdk.play.model.slack.response.SubCommand;
+import com.offdk.play.model.slack.request.SubCommand;
 
 public class SubCommandParser implements Function<String, Optional<SubCommand>> {
 

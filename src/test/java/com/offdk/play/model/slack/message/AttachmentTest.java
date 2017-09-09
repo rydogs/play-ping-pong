@@ -1,7 +1,11 @@
-package com.offdk.play.model.slack.request;
+package com.offdk.play.model.slack.message;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.offdk.play.model.slack.message.Action;
+import com.offdk.play.model.slack.message.Attachment;
+import com.offdk.play.model.slack.message.AttachmentType;
+
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;

@@ -5,11 +5,11 @@ import java.util.function.Predicate;
 import com.offdk.play.model.game.Match;
 import com.offdk.play.model.game.MatchStatus;
 import com.offdk.play.model.slack.User;
-import com.offdk.play.model.slack.request.Message;
-import com.offdk.play.model.slack.response.CallbackRequest;
+import com.offdk.play.model.slack.message.Message;
+import com.offdk.play.model.slack.request.CallbackRequest;
 
 public interface CallbackProcessor {
-  CallbackName name();
+  CallbackName callback();
 
   Message process(CallbackRequest request);
 

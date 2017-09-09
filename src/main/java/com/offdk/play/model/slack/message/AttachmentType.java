@@ -1,14 +1,13 @@
-package com.offdk.play.model.slack.request;
+package com.offdk.play.model.slack.message;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-enum ActionType {
-  BUTTON("button"),
-  SELECT("select");
+public enum AttachmentType {
+  DEFAULT("default");
 
   private final String value;
 
-  ActionType(String value) {
+  AttachmentType(String value) {
     this.value = value;
   }
 

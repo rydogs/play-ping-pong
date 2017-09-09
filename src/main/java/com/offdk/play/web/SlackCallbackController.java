@@ -2,8 +2,8 @@ package com.offdk.play.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
-import com.offdk.play.model.slack.request.Message;
-import com.offdk.play.model.slack.response.CallbackRequest;
+import com.offdk.play.model.slack.message.Message;
+import com.offdk.play.model.slack.request.CallbackRequest;
 import com.offdk.play.service.GameService;
 
 import java.io.IOException;

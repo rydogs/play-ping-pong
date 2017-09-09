@@ -1,4 +1,4 @@
-package com.offdk.play.model.slack.request;
+package com.offdk.play.model.slack.message;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Preconditions;
+import com.offdk.play.model.slack.message.ImmutableAction;
+import com.offdk.play.model.slack.message.ImmutableConfirm;
+
 import java.util.List;
 import javax.annotation.Nullable;
 import org.immutables.value.Value;

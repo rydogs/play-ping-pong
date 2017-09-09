@@ -6,8 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.offdk.play.model.slack.request.Message;
-import com.offdk.play.model.slack.response.SlackCommand;
+import com.offdk.play.model.slack.message.Message;
+import com.offdk.play.model.slack.request.SlackCommand;
 import com.offdk.play.service.GameService;
 
 @Controller
@@ -25,6 +25,6 @@ public class SlackCommandController {
   @ResponseBody
   public Message command(@SlackCommandParam SlackCommand command) {
     LOGGER.info("Request: {}", command);
-    return gameService.challenge(command);
+    return gameService.handleCommand(command);
   }
 }

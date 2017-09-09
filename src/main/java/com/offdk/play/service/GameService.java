@@ -1,62 +1,40 @@
 package com.offdk.play.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.offdk.play.model.game.Match;
-import com.offdk.play.model.game.Player;
-import com.offdk.play.model.slack.User;
-import com.offdk.play.model.slack.request.Action;
-import com.offdk.play.model.slack.request.Attachment;
-import com.offdk.play.model.slack.request.Message;
-import com.offdk.play.model.slack.request.Style;
-import com.offdk.play.model.slack.response.CallbackRequest;
-import com.offdk.play.model.slack.response.SlackCommand;
+import com.offdk.play.model.slack.message.Message;
+import com.offdk.play.model.slack.request.CallbackRequest;
+import com.offdk.play.model.slack.request.SlackCommand;
+import com.offdk.play.model.slack.request.SubCommand;
 import com.offdk.play.persistence.MatchRepository;
 import com.offdk.play.persistence.PlayerRepository;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GameService {
   private final MatchRepository matchRepo;
   private final PlayerRepository playerRepo;
   private Map<CallbackName, CallbackProcessor> callbackProcessors;
+  private Map<SubCommand, SubCommandProcessor> subCommandProcessors;
 
   public GameService(MatchRepository matchRepo, PlayerRepository playerRepo,
-      List<CallbackProcessor> processors) {
+      Set<CallbackProcessor> callbackProcessors, Set<SubCommandProcessor> subCommandProcessors) {
     this.matchRepo = matchRepo;
     this.playerRepo = playerRepo;
-    this.callbackProcessors = processors.stream().collect(
-        Collectors.toMap(p -> p.name(), Function.identity()));
+    this.callbackProcessors = callbackProcessors.stream().collect(
+        Collectors.toMap(p -> p.callback(), Function.identity()));
+    this.subCommandProcessors = subCommandProcessors.stream().collect(
+        Collectors.toMap(p -> p.subcommand(), Function.identity()));
   }
 
-  public Message challenge(SlackCommand command) {
-    Preconditions.checkState(command.mentionedUsers().size() > 0, "Must mention another user to challenge");
-    Preconditions.checkState(
-        !command.mentionedUsers().stream().anyMatch(u -> u.equals(command.commandUser())),
-        "Silly, you should challenge yourself elsewhere...");
-    String teamId = command.team().getId();
-    Player challenger = findOrCreate(teamId, command.commandUser());
-    Player challenged = findOrCreate(teamId, command.mentionedUsers().get(0));
-    Match match = createMatch(teamId, challenger, challenged);
-    Message msg = Message.createInChannelMessage()
-        .addAttachments(
-            Attachment.createAttachment(match.getId(), match.challengeText())
-            .callbackId(match.getId())
-            .addActions(
-                Action.createButton(CallbackName.ACCEPT_MATCH.toString(), "Accept", Style.PRIMARY),
-                Action.createButton(CallbackName.REFUSE_MATCH.toString(), "Refuse", Style.DANGER))
-            .build())
-        .build();
-    return msg;
+  public Message handleCommand(SlackCommand command) {
+    return command.subCommand().map(c -> subCommandProcessors.get(c)).map(p -> p.process(command))
+        .orElseGet(() -> unknownCommand());
   }
+
 
   public Message handleCallback(CallbackRequest request) {
     //TODO: handle more than one action by combining messages
@@ -65,15 +43,8 @@ public class GameService {
   }
 
   @VisibleForTesting
-  Player findOrCreate(String teamId, User user) {
-    return Optional.ofNullable(user)
-        .map(u -> playerRepo.findOne(u.getId()))
-        .orElseGet(
-            () -> playerRepo.save(Player.newPlayer(teamId, user)));
-  }
-
-  @VisibleForTesting
-  Match createMatch(String teamId, Player... players) {
-    return matchRepo.save(new Match(teamId, Lists.newArrayList(players)));
+  static Message unknownCommand() {
+    return Message.createEphemeralMessage().text("Unknow command, please use /play challenge to challenge"
+        + "another play or or /play score to report score").build();
   }
 }

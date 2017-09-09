@@ -1,4 +1,4 @@
-package com.offdk.play.model.slack.request;
+package com.offdk.play.model.slack.message;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
